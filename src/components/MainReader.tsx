@@ -1,0 +1,68 @@
+import { useEffect, useRef } from 'react';
+import type { SubtitleCue } from '../types';
+
+interface MainReaderProps {
+  cues: SubtitleCue[];
+  activeCueId: string | null;
+  onSeekToCue: (cue: SubtitleCue) => void;
+  hasAudio: boolean;
+}
+
+/** Document-flow reader. Active cue highlighted; text selection wins over click-to-seek. */
+export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio }: MainReaderProps) {
+  const containerRef = useRef<HTMLElement>(null);
+  const activeElementRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const element = activeElementRef.current;
+    if (!container || !element) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    if (elementRect.top < containerRect.top + 70 || elementRect.bottom > containerRect.bottom - 90) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [activeCueId]);
+
+  const handleCueClick = (cue: SubtitleCue) => {
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) return;
+    onSeekToCue(cue);
+  };
+
+  if (!hasAudio || cues.length === 0) {
+    return (
+      <main className="flex flex-1 items-center justify-center bg-[#F0F2F5] p-8 text-gray-400 select-none dark:bg-gray-950 dark:text-gray-500">
+        <p className="text-sm">
+          {!hasAudio ? '재생할 오디오 파일을 선택해주세요.' : '연결된 자막이 없거나 자막을 표시할 수 없습니다.'}
+        </p>
+      </main>
+    );
+  }
+
+  return (
+    <main ref={containerRef} className="selectable-reader flex-1 overflow-y-auto bg-[#F0F2F5] px-3 py-6 sm:px-6 dark:bg-gray-950">
+      <div className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-xl border border-gray-200/80 bg-white px-6 py-8 text-base leading-relaxed text-gray-800 shadow-sm sm:px-10 sm:py-12 sm:text-lg dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200">
+        {cues.map((cue) => {
+          const isActive = cue.id === activeCueId;
+          return (
+            <div
+              key={cue.id}
+              ref={isActive ? (el) => void (activeElementRef.current = el) : undefined}
+              onClick={() => handleCueClick(cue)}
+              title="클릭하여 이 문장부터 재생"
+              className={`block w-full cursor-pointer rounded-lg px-3.5 py-2 transition-colors duration-150 ${
+                isActive
+                  ? 'bg-[#FEF08A]/85 text-[1.1em] font-bold text-gray-900 dark:bg-yellow-900/40 dark:text-yellow-100'
+                  : 'text-gray-800 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800/60'
+              }`}
+            >
+              <span>{cue.text}</span>
+            </div>
+          );
+        })}
+      </div>
+    </main>
+  );
+}

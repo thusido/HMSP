@@ -1,0 +1,284 @@
+import { useState } from 'react';
+import {
+  Bars3Icon,
+  ExclamationCircleIcon,
+  FolderIcon,
+  FolderPlusIcon,
+  LinkIcon,
+  MusicalNoteIcon,
+  PencilIcon,
+  PlusIcon,
+} from '@heroicons/react/24/outline';
+import type { AudioItem, PlaylistFolder } from '../types';
+import { compareFileName } from '../services/playlist/compare';
+
+interface PlaylistDrawerProps {
+  isOpen: boolean;
+  isWide: boolean;
+  folders: PlaylistFolder[];
+  items: AudioItem[];
+  dropTargetFolderId: string | null;
+  selectedFolderId: string | null;
+  selectedItemId: string | null;
+  currentPlayingId: string | null;
+  onClose: () => void;
+  onSetDropTargetFolder: (folderId: string | null) => void;
+  onSelectFolder: (folderId: string | null) => void;
+  onSelectItem: (itemId: string) => void;
+  onPlayItem: (item: AudioItem) => void;
+  onAddFiles: () => void;
+  onAddFolder: () => void;
+  onCreateVirtualFolder: () => void;
+  onRenameSelectedFolder: () => void;
+  onMoveFolderUp: () => void;
+  onMoveFolderDown: () => void;
+  onAutoSortFolders: () => void;
+  onDeleteSelected: () => void;
+  onDeleteAll: () => void;
+  onManualAttachSubtitle: (item: AudioItem) => void;
+}
+
+export function PlaylistDrawer({
+  isOpen,
+  isWide,
+  folders,
+  items,
+  dropTargetFolderId,
+  selectedFolderId,
+  selectedItemId,
+  currentPlayingId,
+  onClose,
+  onSetDropTargetFolder,
+  onSelectFolder,
+  onSelectItem,
+  onPlayItem,
+  onAddFiles,
+  onAddFolder,
+  onCreateVirtualFolder,
+  onRenameSelectedFolder,
+  onMoveFolderUp,
+  onMoveFolderDown,
+  onAutoSortFolders,
+  onDeleteSelected,
+  onDeleteAll,
+  onManualAttachSubtitle,
+}: PlaylistDrawerProps) {
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+
+  if (!isOpen) return null;
+
+  const rootItems = items.filter((it) => !it.folderId).sort((a, b) => compareFileName(a.fileName, b.fileName));
+
+  const renderAudioCard = (item: AudioItem) => {
+    const isPlaying = currentPlayingId === item.id;
+    const isSelected = selectedItemId === item.id;
+    return (
+      <div
+        key={item.id}
+        onClick={() => onSelectItem(item.id)}
+        onDoubleClick={() => onPlayItem(item)}
+        className={`group flex cursor-pointer items-center justify-between rounded-md border bg-white p-2 transition-all dark:bg-gray-800 ${
+          isPlaying
+            ? 'border-blue-600 shadow-sm ring-2 ring-blue-500/20 dark:border-blue-500'
+            : isSelected
+              ? 'border-blue-300 bg-blue-50/20 dark:border-blue-700 dark:bg-blue-950/20'
+              : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+        }`}
+      >
+        <div className="mr-2 flex flex-1 items-start gap-2 overflow-hidden">
+          <MusicalNoteIcon className={`h-4 w-4 pt-0.5 ${isPlaying ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`} />
+          <div className="flex-1 overflow-hidden">
+            <div className="flex items-center gap-1.5">
+              <span
+                title={item.fileName}
+                className={`block truncate text-xs ${isPlaying ? 'font-bold text-blue-900 dark:text-blue-200' : 'font-medium text-gray-800 dark:text-gray-200'}`}
+              >
+                {item.fileName}
+              </span>
+              {item.isMissing && (
+                <span title="원본 파일을 찾을 수 없습니다" className="flex-shrink-0">
+                  <ExclamationCircleIcon className="h-3.5 w-3.5 text-red-500" />
+                </span>
+              )}
+            </div>
+            <div className="mt-0.5 truncate text-xs">
+              {item.subtitleFileName ? (
+                <span title={item.subtitleFileName} className="text-gray-500 dark:text-gray-400">
+                  {item.subtitleFileName}
+                </span>
+              ) : (
+                <span className="text-gray-400 italic dark:text-gray-500">연결된 자막 파일 없음</span>
+              )}
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onManualAttachSubtitle(item);
+          }}
+          title="자막 파일 수동 연결/변경"
+          className="flex-shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+        >
+          <LinkIcon className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    );
+  };
+
+  const drawerContent = (
+    <div className="z-30 flex h-full w-80 flex-shrink-0 flex-col border-r border-gray-200 bg-drawer-light select-none dark:border-gray-800 dark:bg-gray-900">
+      <div className="flex h-12 flex-shrink-0 items-center justify-between bg-chrome-light px-2.5 dark:bg-gray-900">
+        <div className="flex items-center gap-1.5">
+          <button type="button" onClick={onAddFiles} title="파일 추가" aria-label="Add files" className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            <PlusIcon className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onAddFolder} title="폴더 추가 (1depth 스캔)" aria-label="Add folder" className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            <FolderPlusIcon className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onCreateVirtualFolder} title="가상 플레이리스트 폴더 생성" aria-label="Create virtual folder" className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            <FolderIcon className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onRenameSelectedFolder}
+            disabled={!selectedFolderId}
+            title="선택된 폴더 이름 수정"
+            aria-label="Rename selected folder"
+            className="rounded-md border border-gray-300 bg-white p-1.5 transition-colors dark:border-gray-700 dark:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <PencilIcon className="h-4 w-4" />
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          title="서랍 닫기"
+          aria-label="Close drawer"
+          className="rounded-md p-1.5 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800"
+        >
+          <Bars3Icon className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div
+        className="flex-1 space-y-3 overflow-y-auto p-2.5"
+        onDragOver={(e) => {
+          e.preventDefault();
+          onSetDropTargetFolder(null);
+        }}
+      >
+        {folders.map((folder, folderIndex) => {
+          const folderItems = items.filter((it) => it.folderId === folder.id).sort((a, b) => compareFileName(a.fileName, b.fileName));
+          const isSelected = selectedFolderId === folder.id;
+          const isCollapsed = !!collapsed[folder.id];
+          const isDropTarget = dropTargetFolderId === folder.id;
+          return (
+            <div
+              key={folder.id}
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onSetDropTargetFolder(folder.id);
+              }}
+              onDragLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) onSetDropTargetFolder(null);
+              }}
+              className={`rounded-lg border p-2 transition-all ${
+                isDropTarget
+                  ? 'border-blue-500 bg-blue-100/70 dark:border-blue-500 dark:bg-blue-950/60'
+                  : isSelected
+                    ? 'border-blue-400 bg-blue-50/40 dark:border-blue-700 dark:bg-blue-950/30'
+                    : 'border-gray-200 bg-drawer-folder dark:border-gray-800 dark:bg-gray-800/80'
+              }`}
+            >
+              <div
+                onClick={() => onSelectFolder(folder.id)}
+                className="flex cursor-pointer items-center justify-between rounded px-1.5 py-1 hover:bg-black/5 dark:hover:bg-white/5"
+              >
+                <div className="flex items-center gap-2 truncate">
+                  <span className="truncate text-xs font-bold text-gray-800 dark:text-gray-200">
+                    {`${(folderIndex + 1).toString().padStart(2, '0')}. ${folder.name}`}
+                  </span>
+                  <span className="font-mono text-xs text-gray-500 dark:text-gray-400">({folderItems.length})</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCollapsed((prev) => ({ ...prev, [folder.id]: !prev[folder.id] }));
+                  }}
+                  className="px-1 text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  {isCollapsed ? '펼치기' : '접기'}
+                </button>
+              </div>
+              {!isCollapsed && (
+                <div className="mt-1.5 space-y-1.5 pl-1">
+                  {folderItems.length === 0 ? (
+                    <div className="rounded bg-white/60 py-2 text-center text-xs text-gray-400 dark:bg-gray-900/60">
+                      오디오 파일이 없습니다
+                    </div>
+                  ) : (
+                    folderItems.map(renderAudioCard)
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {rootItems.length > 0 && (
+          <div className="rounded-lg border border-gray-200 bg-gray-100/70 p-2 dark:border-gray-800 dark:bg-gray-800/50">
+            <div
+              onClick={() => onSelectFolder(null)}
+              className="mb-1.5 flex cursor-pointer items-center justify-between px-1 text-xs font-bold text-gray-600 dark:text-gray-300"
+            >
+              <span>루트 파일 ({rootItems.length})</span>
+            </div>
+            <div className="space-y-1.5 pl-1">{rootItems.map(renderAudioCard)}</div>
+          </div>
+        )}
+
+        {folders.length === 0 && rootItems.length === 0 && (
+          <div className="flex h-40 flex-col items-center justify-center px-4 text-center text-xs text-gray-400 dark:text-gray-500">
+            <p className="mb-1">플레이리스트가 비어 있습니다.</p>
+            <p className="text-xs">상단 버튼 또는 파일을 드래그하여 오디오/자막을 추가하세요.</p>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-shrink-0 items-center justify-between bg-chrome-light p-2 text-xs dark:bg-gray-900">
+        <div className="flex items-center gap-1">
+          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title="선택된 폴더 위로 이동" className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            위로
+          </button>
+          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title="선택된 폴더 아래로 이동" className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            아래로
+          </button>
+          <button type="button" onClick={onAutoSortFolders} title="폴더 이름순 자동 정렬" className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            자동정렬
+          </button>
+        </div>
+        <div className="flex items-center gap-1">
+          <button type="button" onClick={onDeleteSelected} disabled={!selectedFolderId && !selectedItemId} title="선택된 항목 삭제" className="rounded border border-red-200 bg-white px-2 py-1 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-900/60 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/40">
+            삭제
+          </button>
+          <button type="button" onClick={onDeleteAll} title="전체 플레이리스트 비우기" className="rounded border border-red-300 bg-white px-2 py-1 font-medium text-red-700 hover:bg-red-50 dark:border-red-800 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/50">
+            전체삭제
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (isWide) return drawerContent;
+
+  return (
+    <div className="fixed inset-0 z-40 flex pt-[env(safe-area-inset-top)]">
+      <div className="fixed inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
+      <div className="relative z-50 flex h-full">{drawerContent}</div>
+    </div>
+  );
+}

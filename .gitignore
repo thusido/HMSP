@@ -1,0 +1,30 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Deps / build
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Tauri
+src-tauri/target
+src-tauri/gen
+src-tauri/android.keystore
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Local-only (never push to GitHub)
+docs/
+HMSP_user_icon/
