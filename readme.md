@@ -1,19 +1,50 @@
 # HMSP — HMSubtitlePlayer
 
+> Yet another wheel, slightly different.
+
 An audiobook-style continuous document subtitle reader synchronized with audio playback.
 
 > 한국어 안내: [`readme.ko.md`](./readme.ko.md)
 
-## Targets (one web core, adapters per platform)
+![HMSP main screen](.github/screenshots/main.png)
 
-| Target | Packaging | Output |
-|--------|-----------|--------|
-| macOS | Tauri v2 | `.app` / `.dmg` |
-| Windows | Tauri v2 | `.exe` / `.msi` |
-| Android | Tauri v2 Mobile | `.apk` |
-| iPadOS | Vite PWA → load once over network, then offline via Service Worker (add to Home Screen) | `dist/` |
+## Features
 
-## Quickstart
+- Folder/file intake (drag & drop, file picker — audio + subtitles together)
+- Automatic subtitle matching + manual attach
+- Cue click-to-seek, prev/next subtitle and file navigation
+- Playback speed, volume, single-track repeat
+- Refresh reconnect for moved files (filename-led 2-pass matching)
+- Themes (light/dark/system), JSON backup & restore
+
+| Light drawer | Dark | Dark drawer |
+|---|---|---|
+| ![drawer open](.github/screenshots/main_drawer.png) | ![dark mode](.github/screenshots/dark_main.png) | ![drawer open, dark](.github/screenshots/dark_main_drawer.png) |
+
+## Download
+
+Grab a build from [Releases](https://github.com/thusido/HMSP/releases).
+
+| OS | File |
+|----|------|
+| macOS (arm64) | `.dmg` |
+| Windows (x64) | `-setup.exe` / `.msi` |
+| Android (arm64) | `-signed.apk` |
+| iPadOS | PWA `dist/` artifact (add to Home Screen, then offline) |
+
+These are unsigned test builds:
+
+- **macOS**: copy to Applications, then **right-click → Open**. If it still
+  refuses ("damaged"), clear quarantine (only for this self-built app):
+  `xattr -dr com.apple.quarantine /Applications/HMSubtitlePlayer.app`
+- **Windows**: on the SmartScreen "unknown publisher" prompt,
+  click **More info → Run anyway**.
+- **Android**: allow installs from unknown sources first.
+
+## Development
+
+Prerequisites: Node LTS, pnpm 10, Rust stable.
+Android additionally needs the Android Studio SDK (see below).
 
 ```bash
 pnpm install
@@ -25,7 +56,7 @@ pnpm tauri dev    # desktop shell
 pnpm tauri build  # desktop installer
 ```
 
-## Reproduce from git
+### Reproduce from git
 
 `src-tauri/gen/`, `docs/`, and `HMSP_user_icon/` are git-ignored by design.
 After cloning:
@@ -41,23 +72,9 @@ Android env (macOS + Android Studio SDK): `ANDROID_HOME=$HOME/Library/Android/sd
 `NDK_HOME=$ANDROID_HOME/ndk/<ver>`, JDK 17+; use the rustup stable toolchain
 (Homebrew cargo lacks Android targets).
 
-## Layout (inherited, flex-first)
+Verify every increment: `pnpm exec tsc -b`, `pnpm test`, `pnpm build`,
+and flex-lint (`rg 'w-\[.*px\]|min-w-\[|text-\[[0-9]+px\]' src` must be empty).
 
-`APP BAR → MAIN READER → PLAYBACK BAR`. Drawer: PUSH on wide (≥768px), OVERLAY with scrim on mobile.
-Playback buttons in strict order: `[PrevFile][PrevSub][Play][NextSub][NextFile]`.
-Layout uses flexbox (`flex-1`, `min-w-0`); fixed-px widths are banned (see `docs/구현 요구서.md`).
+## License
 
-## Invariants
-
-1. Source media files are read-only — never modify/delete them.
-2. Broken/missing subtitles never block audio playback.
-3. Reader has the highest layout priority: Reader > Playback Bar > Drawer.
-4. No sync dialogs (`confirm`/`prompt`) — async custom modals only.
-
-Details: [`docs/기획 문서.md`](./docs/기획%20문서.md) · [`docs/스펙 문서.md`](./docs/스펙%20문서.md) · [`docs/구현 요구서.md`](./docs/구현%20요구서.md)
-
-## Icons
-
-Applied from `HMSP_user_icon/` (user-provided): Tauri `icon.icns`/`.ico`/`.png` + PWA
-`192x192`/`512x512` + favicon `16/32` + apple-touch `180`. Re-run `pnpm icons` after any
-source change (PNG resizing needs macOS `sips`).
+MIT — see [LICENSE](./LICENSE).

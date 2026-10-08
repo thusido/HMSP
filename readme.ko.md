@@ -1,40 +1,74 @@
 # HMSP — HMSubtitlePlayer (한국어 안내)
 
+> 조금 모양이 다른 바퀴.
+
 오디오북처럼 흘러가는 연속 문서 자막 리더 + 오디오 동기 재생 앱.
 
-## 대상 (웹 코어 1개 + 플랫폼별 어댑터)
+![HMSP 메인 화면](.github/screenshots/main.png)
 
-| 대상 | 패키징 | 산출물 |
-|------|--------|--------|
-| macOS | Tauri v2 | `.app` / `.dmg` |
-| Windows | Tauri v2 | `.exe` / `.msi` |
-| Android | Tauri v2 Mobile | `.apk` |
-| iPadOS | Vite PWA → 최초 1회 네트워크에서 로드 후 오프라인 실행 (홈 화면에 추가) | `dist/` |
+## 기능
 
-## 빠른시작
+- 폴더/파일 가져오기 (드래그 앤 드롭·파일 선택 — 오디오+자막 일괄)
+- 자막 자동 연결 + 수동 연결
+- 자막 큐 클릭 탐색, 이전/다음 자막·파일 이동
+- 배속·볼륨·한곡반복
+- 파일이 옮겨갔을 때 새로고침 재연결 (파일명 기반 2단계 매칭)
+- 테마 (라이트/다크/시스템), JSON 백업·복구
+
+| 라이트 서랍 | 다크 | 다크 서랍 |
+|---|---|---|
+| ![서랍 열림](.github/screenshots/main_drawer.png) | ![다크 모드](.github/screenshots/dark_main.png) | ![서랍 열림, 다크](.github/screenshots/dark_main_drawer.png) |
+
+## 다운로드
+
+[Releases](https://github.com/thusido/HMSP/releases)에서 받으세요.
+
+| OS | 파일 |
+|----|------|
+| macOS (arm64) | `.dmg` |
+| Windows (x64) | `-setup.exe` / `.msi` |
+| Android (arm64) | `-signed.apk` |
+| iPadOS | PWA `dist/` 아티팩트 (홈 화면에 추가 후 오프라인) |
+
+무서명 테스트 빌드라서 첫 설치 때 안내가 뜹니다:
+
+- **macOS**: Applications에 복사 후 **우클릭 → 열기**로 실행.
+  그래도 "손상됨"이 뜨면 quarantine 해제 (직접 빌드한 앱에만 사용):
+  `xattr -dr com.apple.quarantine /Applications/HMSubtitlePlayer.app`
+- **Windows**: SmartScreen "알 수 없는 게시자"에서 **추가 정보 → 그래도 실행**.
+- **Android**: 알 수 없는 출처의 앱 설치를 먼저 허용.
+
+## 개발
+
+준비물: Node LTS, pnpm 10, Rust stable.
+Android는 Android Studio SDK 추가 필요 (아래 참고).
 
 ```bash
 pnpm install
-pnpm dev
-pnpm build
-pnpm build:pwa
-pnpm test
+pnpm dev          # 웹 개발 서버 (:5173)
+pnpm build        # 웹 / Tauri 프론트엔드 빌드
+pnpm build:pwa    # PWA 빌드 (Service Worker + manifest)
+pnpm test         # vitest
+pnpm tauri dev    # 데스크톱 셸
+pnpm tauri build  # 데스크톱 설치본
 ```
 
-## 레이아웃 (계승, flex-first)
+### git에서 재현
 
-`앱바 → 리더 → 재생바` 수직 구조. 와이드(≥768px)는 Drawer PUSH, 모바일은 scrim OVERLAY.
-재생 버튼 순서 고정: `[이전파일][이전자막][재생][다음자막][다음파일]`.
-레이아웃은 flexbox(`flex-1`, `min-w-0`) 사용, 고정 px 너비 금지.
+`src-tauri/gen/`, `docs/`, `HMSP_user_icon/`은 의도적으로 git에서 제외됩니다.
+클론 후:
 
-## 불변규칙
+```bash
+pnpm install
+pnpm tauri android init   # src-tauri/gen 재생성 (Android SDK 필요)
+pnpm tauri icon <png>     # 전 플랫폼 아이콘 재생성 (Android mipmap 포함)
+pnpm tauri android build  # 또는: pnpm tauri build (데스크톱)
+```
 
-1. 원본 미디어 파일은 읽기 전용 (수정·삭제 금지).
-2. 자막이 깨져도 재생은 멈추지 않음.
-3. 공간 우선순위: 리더 > 재생바 > 서랍.
-4. `confirm`/`prompt` 금지 — 비동기 커스텀 모달 사용.
+Android 환경 (macOS + Android Studio SDK): `ANDROID_HOME=$HOME/Library/Android/sdk`,
+`NDK_HOME=$ANDROID_HOME/ndk/<버전>`, JDK 17+; rustup stable 툴체인 사용
+(Homebrew cargo에는 Android 타겟이 없음).
 
-## 아이콘
+## 라이선스
 
-`HMSP_user_icon/` 원본에서 적용 완료 (Tauri icns/ico/png, PWA 192/512, 파비콘 16/32, apple-touch 180).
-원본 변경 시 `pnpm icons` 재실행 (PNG 리사이즈는 macOS `sips` 필요).
+MIT — [LICENSE](./LICENSE) 참고.
