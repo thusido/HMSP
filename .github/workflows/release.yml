@@ -89,6 +89,10 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    env:
+      # GitHub ubuntu images preinstall the SDK here; setup-android@v3 is
+      # skipped because it tries the long-removed `tools` package.
+      ANDROID_HOME: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
 
@@ -104,9 +108,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-
-      - name: setup Android SDK
-        uses: android-actions/setup-android@v3
 
       - name: install NDK + build tools
         run: |
