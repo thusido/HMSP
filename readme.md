@@ -12,6 +12,7 @@ An audiobook-style continuous document subtitle reader synchronized with audio p
 
 - Folder/file intake (drag & drop, file picker — audio + subtitles together)
 - Automatic subtitle matching + manual attach
+- Supported files: audio `wav/mp3/m4a` · subtitles `vtt/srt` · plain text `txt` (reader only, no cue seeking)
 - Cue click-to-seek, prev/next subtitle and file navigation
 - Playback speed, volume, single-track repeat
 - Refresh reconnect for moved files (filename-led 2-pass matching)

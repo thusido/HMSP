@@ -26,7 +26,8 @@ import { displayNameOf, fsUriKey, parseFsUriKey, withFilePath } from './Platform
 
 const AUDIO_EXTS = ['mp3', 'wav', 'm4a'];
 const SUBTITLE_EXTS = ['vtt', 'srt'];
-const ALL_EXTS = [...AUDIO_EXTS, ...SUBTITLE_EXTS];
+const TEXT_EXTS = ['txt'];
+const ALL_EXTS = [...AUDIO_EXTS, ...SUBTITLE_EXTS, ...TEXT_EXTS];
 
 /** Desktop/Android adapter: native dialogs + fs, bridged to web File so core stays unchanged. */
 export class TauriAdapter implements PlatformAdapter {

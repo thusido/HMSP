@@ -348,6 +348,7 @@ export default function App() {
           activeCueId={activeCue?.id ?? null}
           onSeekToCue={(cue) => playback.seek(cue.startTime)}
           hasAudio={!!currentItem}
+          plainText={currentItem?.plainText ?? null}
           readerFont={READER_FONT_STACKS[settings.readerFont]}
           readerFontSize={settings.fontSize}
           readerLetterSpacing={settings.letterSpacing}

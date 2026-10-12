@@ -20,6 +20,9 @@ export interface AudioItem {
   filePath?: string;
   subtitleFileName?: string;
   subtitles?: SubtitleCue[];
+  /** Plain-text companion (.txt): shown as-is, no cue tracking or seeking. */
+  plainTextFileName?: string;
+  plainText?: string;
   isMissing?: boolean;
   folderId?: string; // virtual folder id, undefined = root group
   duration?: number; // seconds
