@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { displayNameOf, fsUriKey, getFilePath, parseFsUriKey, withFilePath } from './PlatformAdapter';
+import { displayNameOf, fsUriKey, getFilePath, parseFsUriKey, shouldUseSafeArea, withFilePath } from './PlatformAdapter';
 
 describe('file path bridge', () => {
   it('round-trips a native path on a File shell', () => {
@@ -36,5 +36,11 @@ describe('fsUriKey', () => {
     expect(parseFsUriKey(key)).toEqual({ uri: 'content://x/tree/y', documentTopTreeUri: 'content://x/tree/y', name: 'a.mp3' });
     expect(parseFsUriKey('/music/a.mp3')).toBeNull();
     expect(parseFsUriKey('android-fs:not-json')).toBeNull();
+  });
+});
+
+describe('shouldUseSafeArea', () => {
+  it('is false in a plain browser tab (no Tauri, no standalone)', () => {
+    expect(shouldUseSafeArea()).toBe(false);
   });
 });

@@ -43,6 +43,18 @@ export function getFilePath(file: File): string | undefined {
 }
 
 /**
+ * Whether OS chrome actually overlays the webview (and safe-area padding is due):
+ * Tauri shells (edge-to-edge) or installed standalone PWAs. Plain browser tabs and
+ * desktop windows start below the chrome, so padding there only pushes content down.
+ */
+export function shouldUseSafeArea(): boolean {
+  if (typeof window === 'undefined') return false;
+  const w = window as unknown as { __TAURI_INTERNALS__?: unknown };
+  if (w.__TAURI_INTERNALS__) return true;
+  return typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)').matches;
+}
+
+/**
  * Display name for a native dialog path. Android returns SAF document IDs
  * (`primary%3ADownload%2Ffile.mp3`); desktop returns plain paths.
  * Filenames containing a literal `%` fall back to the raw segment.

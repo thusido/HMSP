@@ -18,6 +18,7 @@ import {
 } from './services/playback/navigation';
 import type { AppTheme, AudioItem } from './types';
 import { parseDropEvent } from './utils/dragAndDrop';
+import { shouldUseSafeArea } from './services/platform/PlatformAdapter';
 
 const SETTINGS_KEY = 'HMSP_V1_SETTINGS';
 
@@ -286,7 +287,7 @@ export default function App() {
         e.stopPropagation();
       }}
       onDrop={handleDrop}
-      className="flex h-screen w-screen overflow-hidden bg-[#FAFAFA] pt-[env(safe-area-inset-top)] text-gray-900"
+      className={`flex h-dvh w-screen overflow-hidden bg-[#FAFAFA] text-gray-900${shouldUseSafeArea() ? ' pt-[env(safe-area-inset-top)]' : ''}`}
     >
       <PlaylistDrawer
         isOpen={isDrawerOpen}

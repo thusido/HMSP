@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import type { AudioItem, PlaylistFolder } from '../types';
 import { compareFileName } from '../services/playlist/compare';
+import { shouldUseSafeArea } from '../services/platform/PlatformAdapter';
 
 interface PlaylistDrawerProps {
   isOpen: boolean;
@@ -276,7 +277,7 @@ export function PlaylistDrawer({
   if (isWide) return drawerContent;
 
   return (
-    <div className="fixed inset-0 z-40 flex pt-[env(safe-area-inset-top)]">
+    <div className={`fixed inset-0 z-40 flex${shouldUseSafeArea() ? ' pt-[env(safe-area-inset-top)]' : ''}`}>
       <div className="fixed inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
       <div className="relative z-50 flex h-full">{drawerContent}</div>
     </div>
