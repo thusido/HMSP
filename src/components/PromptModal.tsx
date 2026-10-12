@@ -27,7 +27,7 @@ export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onC
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60" onClick={onCancel} aria-hidden="true" />
-      <div className="relative z-50 w-full max-w-sm rounded-xl border border-gray-200 bg-white p-6 text-gray-800 shadow-2xl dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100">
+      <div className="relative z-50 w-full max-w-sm rounded-3xl border border-fog bg-paper p-6 text-ink dark:border-white/10 dark:bg-night dark:text-white">
         <p className="pb-4 text-sm leading-relaxed whitespace-pre-line">{message}</p>
         <input
           ref={inputRef}
@@ -37,20 +37,20 @@ export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onC
           onKeyDown={(e) => {
             if (e.key === 'Enter') onConfirm(value);
           }}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+          className="w-full rounded-md border border-fog px-3 py-2 focus:ring-2 focus:ring-graphite focus:outline-none dark:border-white/10 dark:bg-night-card dark:text-white"
         />
-        <div className="mt-3 flex justify-end gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
+        <div className="mt-3 flex justify-end gap-2 border-t border-gray-100 pt-3 dark:border-white/10">
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            className="rounded-2xl bg-paper-deep px-4 py-1.5 text-xs font-medium text-graphite transition-colors hover:bg-paper-deep dark:bg-night-card dark:text-white dark:hover:bg-night-hover"
           >
             {t.modal.cancel}
           </button>
           <button
             type="button"
             onClick={() => onConfirm(value)}
-            className="rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+            className="rounded-2xl bg-mint px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:bg-mint/85"
           >
             {t.modal.confirm}
           </button>

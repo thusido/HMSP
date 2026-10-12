@@ -5,21 +5,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        chrome: {
-          light: '#F3F4F6',
-          hover: '#E5E7EB',
-          active: '#D1D5DB',
-          dark: '#1F2937',
-        },
-        drawer: {
-          light: '#F9FAFB',
-          folder: '#EAECEF',
-          dark: '#1A202C',
-        },
-        accent: {
-          highlight: 'rgba(254, 240, 138, 0.65)',
-          blue: '#2563EB',
-        },
+        paper: '#ffffff',
+        'paper-deep': '#f5f5f5',
+        tint: '#f7f5ed',
+        fog: '#ebebeb',
+        ink: '#1a1712',
+        graphite: '#707070',
+        smoke: '#adadad',
+        sunshine: '#ffda6e',
+        mint: '#6ece9d',
+        night: '#0a0a0a',
+        'night-card': '#141414',
+        'night-hover': '#1f1f1f',
       },
     },
   },

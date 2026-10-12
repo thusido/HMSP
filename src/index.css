@@ -74,6 +74,10 @@ body {
   -webkit-user-select: none;
 }
 
+html.dark body {
+  background: #0a0a0a;
+}
+
 /* Slim scrollbar for the reader */
 ::-webkit-scrollbar {
   width: 6px;
@@ -85,12 +89,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.4);
+  background: rgba(112, 112, 112, 0.4);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(156, 163, 175, 0.7);
+  background: rgba(112, 112, 112, 0.7);
 }
 
 /* Text selection is allowed only inside the reader */
