@@ -1,16 +1,49 @@
-import { ArrowDownTrayIcon, ArrowUpTrayIcon, ComputerDesktopIcon, MoonIcon, SunIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowDownTrayIcon, ArrowUpTrayIcon, ComputerDesktopIcon, MinusIcon, MoonIcon, PlusIcon, SunIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type { AppTheme } from '../types';
+import type { AppSettings, ReaderFont } from '../features/settings/useSettings';
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   theme: AppTheme;
   onChangeTheme: (theme: AppTheme) => void;
+  readerFont: ReaderFont;
+  fontSize: number;
+  letterSpacing: number;
+  lineHeight: number;
+  onUpdateReader: (patch: Partial<Pick<AppSettings, 'readerFont' | 'fontSize' | 'letterSpacing' | 'lineHeight'>>) => void;
+  onResetReader: () => void;
   onExportPlaylist: () => void;
   onImportPlaylist: () => void;
 }
 
-export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, onExportPlaylist, onImportPlaylist }: SettingsModalProps) {
+const FONT_LABELS: { value: ReaderFont; label: string }[] = [
+  { value: 'pretendard', label: '기본' },
+  { value: 'noto-serif-kr', label: '본명조' },
+  { value: 'suit', label: '수트' },
+  { value: 'ridibatang', label: '리디바탕' },
+];
+
+function Stepper({ label, value, display, onMinus, onPlus }: { label: string; value: string; display?: string; onMinus: () => void; onPlus: () => void }) {
+  const btn =
+    'flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800';
+  return (
+    <div className="flex items-center justify-between py-1">
+      <span className="text-xs text-gray-600 dark:text-gray-400">{label}</span>
+      <div className="flex items-center gap-2">
+        <button type="button" onClick={onMinus} aria-label={`${value} 감소`} className={btn}>
+          <MinusIcon className="h-3.5 w-3.5" />
+        </button>
+        <span className="w-12 text-center text-xs font-medium text-gray-800 dark:text-gray-200">{display ?? value}</span>
+        <button type="button" onClick={onPlus} aria-label={`${value} 증가`} className={btn}>
+          <PlusIcon className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFont, fontSize, letterSpacing, lineHeight, onUpdateReader, onResetReader, onExportPlaylist, onImportPlaylist }: SettingsModalProps) {
   if (!isOpen) return null;
 
   const themeBtn = (active: boolean) =>
@@ -58,6 +91,27 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, onExportP
           </div>
 
           <div>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">자막 리더 폰트</span>
+              <button type="button" onClick={onResetReader} className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300">
+                초기화
+              </button>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {FONT_LABELS.map((f) => (
+                <button key={f.value} type="button" onClick={() => onUpdateReader({ readerFont: f.value })} className={themeBtn(readerFont === f.value)}>
+                  <span>{f.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-2">
+              <Stepper label="크기" value={`${fontSize}`} display={`${fontSize}px`} onMinus={() => onUpdateReader({ fontSize: Math.max(10, fontSize - 1) })} onPlus={() => onUpdateReader({ fontSize: Math.min(32, fontSize + 1) })} />
+              <Stepper label="자간" value={`${letterSpacing}%`} onMinus={() => onUpdateReader({ letterSpacing: Math.max(-5, letterSpacing - 1) })} onPlus={() => onUpdateReader({ letterSpacing: Math.min(20, letterSpacing + 1) })} />
+              <Stepper label="줄간격" value={`${lineHeight}%`} onMinus={() => onUpdateReader({ lineHeight: Math.max(100, lineHeight - 5) })} onPlus={() => onUpdateReader({ lineHeight: Math.min(250, lineHeight + 5) })} />
+            </div>
+          </div>
+
+          <div>
             <span className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300">플레이리스트 백업 및 복구</span>
             <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
               구조를 JSON으로 내보내거나 불러옵니다. 복구 후 새로고침으로 미디어를 재연결하세요.
@@ -75,7 +129,11 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, onExportP
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-3 text-right dark:border-gray-800">
+        <div className="border-t border-gray-100 pt-3 dark:border-gray-800">
+          <p className="mb-2 text-left text-xs leading-relaxed text-gray-400 dark:text-gray-500">
+            폰트: Pretendard · Noto Serif KR · SUIT · 리디바탕 (SIL OFL, 앱 내 번들)
+          </p>
+          <div className="text-right">
           <button
             type="button"
             onClick={onClose}
@@ -83,6 +141,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, onExportP
           >
             닫기
           </button>
+          </div>
         </div>
       </div>
     </div>

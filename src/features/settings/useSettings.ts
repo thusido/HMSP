@@ -28,6 +28,21 @@ const DEFAULTS: AppSettings = {
 
 const READER_FONTS: ReaderFont[] = ['pretendard', 'noto-serif-kr', 'suit', 'ridibatang'];
 
+/** Display stacks for readerFont values (reader container only). */
+export const READER_FONT_STACKS: Record<ReaderFont, string> = {
+  pretendard: "'Pretendard', sans-serif",
+  'noto-serif-kr': "'Noto Serif KR', serif",
+  suit: "'SUIT', sans-serif",
+  ridibatang: "'RIDIBatang', serif",
+};
+
+export const READER_DEFAULTS = {
+  readerFont: DEFAULTS.readerFont,
+  fontSize: DEFAULTS.fontSize,
+  letterSpacing: DEFAULTS.letterSpacing,
+  lineHeight: DEFAULTS.lineHeight,
+};
+
 function loadSettings(): AppSettings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -56,6 +71,10 @@ export function useSettings() {
     setSettings((prev) => ({ ...prev, ...patch }));
   }, []);
 
+  const resetReaderSettings = useCallback(() => {
+    setSettings((prev) => ({ ...prev, ...READER_DEFAULTS }));
+  }, []);
+
   useEffect(() => {
     const isDark =
       settings.theme === 'dark' ||
@@ -63,5 +82,5 @@ export function useSettings() {
     document.documentElement.classList.toggle('dark', isDark);
   }, [settings.theme]);
 
-  return { settings, updateSettings };
+  return { settings, updateSettings, resetReaderSettings };
 }

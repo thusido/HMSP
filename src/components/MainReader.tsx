@@ -6,10 +6,14 @@ interface MainReaderProps {
   activeCueId: string | null;
   onSeekToCue: (cue: SubtitleCue) => void;
   hasAudio: boolean;
+  readerFont: string;
+  readerFontSize: number;
+  readerLetterSpacing: number;
+  readerLineHeight: number;
 }
 
 /** Document-flow reader. Active cue highlighted; text selection wins over click-to-seek. */
-export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio }: MainReaderProps) {
+export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFont, readerFontSize, readerLetterSpacing, readerLineHeight }: MainReaderProps) {
   const containerRef = useRef<HTMLElement>(null);
   const activeElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,7 +47,15 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio }: MainRea
 
   return (
     <main ref={containerRef} className="selectable-reader flex-1 overflow-y-auto bg-[#F0F2F5] px-3 py-6 sm:px-6 dark:bg-gray-950">
-      <div className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-xl border border-gray-200/80 bg-white px-6 py-8 text-base leading-relaxed text-gray-800 shadow-sm sm:px-10 sm:py-12 sm:text-lg dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200">
+      <div
+        className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-xl border border-gray-200/80 bg-white px-6 py-8 text-gray-800 shadow-sm sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200"
+        style={{
+          fontFamily: readerFont,
+          fontSize: `${readerFontSize}px`,
+          letterSpacing: `${readerLetterSpacing / 100}em`,
+          lineHeight: `${readerLineHeight}%`,
+        }}
+      >
         {cues.map((cue) => {
           const isActive = cue.id === activeCueId;
           return (
