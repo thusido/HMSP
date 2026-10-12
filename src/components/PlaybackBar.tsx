@@ -45,7 +45,7 @@ function formatTime(seconds: number): string {
 }
 
 const iconBtn =
-  'rounded-md p-1.5 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800';
+  'rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover';
 
 /**
  * Bottom bar. Button order is strict:
@@ -91,12 +91,12 @@ export function PlaybackBar({
   const roundBtn = (enabled: boolean) =>
     `rounded-full p-1.5 transition-colors sm:p-2 ${
       enabled
-        ? 'text-gray-800 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800'
+        ? 'text-ink hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover'
         : 'cursor-not-allowed text-gray-300 dark:text-gray-700'
     }`;
 
   return (
-    <footer className="z-10 flex-shrink-0 select-none bg-chrome-light px-4 py-2.5 dark:bg-gray-900">
+    <footer className="z-10 flex-shrink-0 select-none bg-paper px-4 py-2.5 dark:bg-night">
       <div className="mb-2 flex w-full justify-center">
         <div className="flex w-full max-w-2xl items-center gap-3 px-6 sm:px-10">
           <span className="w-10 flex-shrink-0 text-right font-mono text-xs text-gray-500">
@@ -111,7 +111,7 @@ export function PlaybackBar({
               value={currentTime}
               onChange={(e) => onSeek(parseFloat(e.target.value))}
               aria-label={t.playback.seek}
-              className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-gray-300 accent-blue-600 dark:bg-gray-700"
+              className="h-1.5 w-full cursor-pointer appearance-none rounded-2xl bg-ink/20 accent-mint dark:bg-night-hover"
             />
           </div>
           <span className="w-10 flex-shrink-0 font-mono text-xs text-gray-500">{formatTime(duration)}</span>
@@ -125,8 +125,8 @@ export function PlaybackBar({
               {volume === 0 ? <SpeakerXMarkIcon className="h-4 w-4" /> : <SpeakerWaveIcon className="h-4 w-4" />}
             </button>
             {volumeOpen && (
-              <div className="absolute bottom-9 left-0 z-30 w-44 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                <div className="mb-1 flex justify-between text-xs text-gray-600 dark:text-gray-300">
+              <div className="absolute bottom-9 left-0 z-30 w-44 rounded-2xl border border-ink bg-paper p-3 dark:border-gray-700 dark:bg-night-card">
+                <div className="mb-1 flex justify-between text-xs text-graphite dark:text-gray-300">
                   <span>{t.playback.volumeLabel}</span>
                   <span className="font-semibold">{Math.round(volume * 100)}%</span>
                 </div>
@@ -137,7 +137,7 @@ export function PlaybackBar({
                   step={5}
                   value={Math.round(volume * 100)}
                   onChange={(e) => onChangeVolume(parseInt(e.target.value, 10) / 100)}
-                  className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-blue-600 dark:bg-gray-700"
+                  className="h-1.5 w-full cursor-pointer appearance-none rounded-2xl bg-ink/20 accent-mint dark:bg-night-hover"
                 />
               </div>
             )}
@@ -148,12 +148,12 @@ export function PlaybackBar({
               type="button"
               onClick={() => setSpeedOpen((v) => !v)}
               aria-label={t.playback.speed}
-              className="rounded-md border border-gray-300 bg-white px-2 py-0.5 text-xs font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              className="rounded-md border border-ink bg-paper px-2 py-0.5 text-xs font-medium text-graphite dark:border-gray-700 dark:bg-night-card dark:text-gray-200"
             >
               {rate}x
             </button>
             {speedOpen && (
-              <div className="absolute bottom-9 left-0 z-30 w-24 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+              <div className="absolute bottom-9 left-0 z-30 w-24 rounded-2xl border border-ink bg-paper py-1 dark:border-gray-700 dark:bg-night-card">
                 {SPEED_OPTIONS.map((s) => (
                   <button
                     key={s}
@@ -162,10 +162,10 @@ export function PlaybackBar({
                       onChangeSpeed(s);
                       setSpeedOpen(false);
                     }}
-                    className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-xs hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                    className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-xs hover:bg-paper-deep dark:hover:bg-night-hover ${
                       rate === s
-                        ? 'bg-blue-50 font-bold text-blue-600 dark:bg-blue-950/40 dark:text-blue-400'
-                        : 'text-gray-700 dark:text-gray-200'
+                        ? 'bg-mint/20 font-bold text-ink dark:bg-mint/15 dark:text-mint'
+                        : 'text-graphite dark:text-gray-200'
                     }`}
                   >
                     <span>{s}x</span>
@@ -188,7 +188,7 @@ export function PlaybackBar({
             type="button"
             onClick={onTogglePlay}
             aria-label={isPlaying ? t.playback.pause : t.playback.play}
-            className="rounded-full bg-blue-600 p-2 text-white shadow-sm transition-transform active:scale-95 sm:p-2.5"
+            className="rounded-full bg-mint p-2 text-ink transition-transform active:scale-95 sm:p-2.5"
           >
             {isPlaying ? <PauseIcon className="h-5 w-5 sm:h-6 sm:w-6" /> : <PlayIcon className="h-5 w-5 translate-x-0.5 sm:h-6 sm:w-6" />}
           </button>
@@ -207,8 +207,8 @@ export function PlaybackBar({
             aria-label={t.playback.repeat}
             className={`rounded-md p-1.5 transition-colors ${
               repeatMode === 'repeat-one'
-                ? 'bg-blue-100 font-bold text-blue-600 dark:bg-blue-950/60 dark:text-blue-400'
-                : 'text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800'
+                ? 'bg-mint/20 font-bold text-ink dark:bg-mint/15 dark:text-mint'
+                : 'text-graphite hover:bg-paper-deep dark:text-gray-400 dark:hover:bg-night-hover'
             }`}
           >
             <ArrowPathIcon className="h-4 w-4" />

@@ -5,6 +5,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        paper: '#f8f5ed',
+        paperDeep: '#ece4d0',
+        ink: '#1a1712',
+        graphite: '#707070',
+        sunshine: '#ffda6e',
+        mint: '#6ece9d',
+        night: '#14120e',
+        nightCard: '#1e1a14',
+        nightHover: '#2a241b',
         chrome: {
           light: '#F3F4F6',
           hover: '#E5E7EB',

@@ -19,7 +19,7 @@ export function Notice({ notice }: { notice: NoticeState | null }) {
   if (!notice || !visible) return null;
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4">
-      <p className="max-w-2xl rounded-lg bg-gray-900/90 px-4 py-2 text-center text-xs whitespace-pre-line text-white shadow-lg dark:bg-gray-100/90 dark:text-gray-900">
+      <p className="max-w-2xl rounded-2xl bg-ink/90 px-4 py-2 text-center text-xs whitespace-pre-line text-white dark:bg-paper-deep/90 dark:text-ink">
         {notice.message}
       </p>
     </div>

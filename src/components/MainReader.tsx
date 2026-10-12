@@ -41,7 +41,7 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
 
   if (!hasAudio || (cues.length === 0 && !plainText)) {
     return (
-      <main className="flex flex-1 items-center justify-center bg-[#F0F2F5] p-8 text-gray-400 select-none dark:bg-gray-950 dark:text-gray-500">
+      <main className="flex flex-1 items-center justify-center bg-paper p-8 text-gray-400 select-none dark:bg-night dark:text-gray-500">
         <p className="text-sm">
           {!hasAudio ? t.reader.noAudio : t.reader.noSubtitle}
         </p>
@@ -52,9 +52,9 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
   // Plain text companion: readable as-is, no cue tracking or seeking.
   if (cues.length === 0 && plainText) {
     return (
-      <main className="selectable-reader flex-1 overflow-y-auto bg-[#F0F2F5] px-3 py-6 sm:px-6 dark:bg-gray-950">
+      <main className="selectable-reader flex-1 overflow-y-auto bg-paper px-3 py-6 sm:px-6 dark:bg-night">
         <div
-          className="mx-auto min-h-full max-w-2xl rounded-xl border border-gray-200/80 bg-white px-6 py-8 text-gray-800 shadow-sm sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200"
+          className="mx-auto min-h-full max-w-2xl rounded-3xl border border-ink/80 bg-paper px-6 py-8 text-ink sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-night dark:text-gray-200"
           style={{
             fontFamily: readerFont,
             fontSize: `${readerFontSize}px`,
@@ -71,9 +71,9 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
   }
 
   return (
-    <main ref={containerRef} className="selectable-reader flex-1 overflow-y-auto bg-[#F0F2F5] px-3 py-6 sm:px-6 dark:bg-gray-950">
+    <main ref={containerRef} className="selectable-reader flex-1 overflow-y-auto bg-paper px-3 py-6 sm:px-6 dark:bg-night">
       <div
-        className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-xl border border-gray-200/80 bg-white px-6 py-8 text-gray-800 shadow-sm sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200"
+        className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-3xl border border-ink/80 bg-paper px-6 py-8 text-ink sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-night dark:text-gray-200"
         style={{
           fontFamily: readerFont,
           fontSize: `${readerFontSize}px`,
@@ -89,10 +89,10 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
               ref={isActive ? (el) => void (activeElementRef.current = el) : undefined}
               onClick={() => handleCueClick(cue)}
               title={t.reader.cueHint}
-              className={`block w-full cursor-pointer rounded-lg px-3.5 py-2 transition-colors duration-150 ${
+              className={`block w-full cursor-pointer rounded-2xl px-3.5 py-2 transition-colors duration-150 ${
                 isActive
-                  ? 'bg-[#FEF08A]/85 text-[1.1em] font-bold text-gray-900 dark:bg-yellow-900/40 dark:text-yellow-100'
-                  : 'text-gray-800 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800/60'
+                  ? 'bg-sunshine/85 text-[1.1em] font-bold text-ink dark:bg-yellow-900/40 dark:text-yellow-100'
+                  : 'text-ink hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover/60'
               }`}
             >
               <span>{cue.text}</span>

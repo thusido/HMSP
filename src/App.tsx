@@ -285,7 +285,7 @@ export default function App() {
         e.stopPropagation();
       }}
       onDrop={handleDrop}
-      className={`flex h-dvh w-screen overflow-hidden bg-[#FAFAFA] text-gray-900${shouldUseSafeArea() ? ' pt-[env(safe-area-inset-top)]' : ''}`}
+      className={`flex h-dvh w-screen overflow-hidden bg-paper text-ink${shouldUseSafeArea() ? ' pt-[env(safe-area-inset-top)]' : ''}`}
     >
       <PlaylistDrawer
         isOpen={isDrawerOpen}
