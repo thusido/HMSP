@@ -1,4 +1,5 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { type Lang, STRINGS } from '../i18n';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -6,11 +7,13 @@ interface ConfirmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   destructive?: boolean;
+  lang: Lang;
 }
 
 /** Async replacement for window.confirm. */
-export function ConfirmModal({ isOpen, message, onConfirm, onCancel, destructive = false }: ConfirmModalProps) {
+export function ConfirmModal({ isOpen, message, onConfirm, onCancel, destructive = false, lang }: ConfirmModalProps) {
   if (!isOpen) return null;
+  const t = STRINGS[lang];
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60" onClick={onCancel} aria-hidden="true" />
@@ -25,7 +28,7 @@ export function ConfirmModal({ isOpen, message, onConfirm, onCancel, destructive
             onClick={onCancel}
             className="rounded-lg bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
           >
-            취소
+            {t.modal.cancel}
           </button>
           <button
             type="button"
@@ -34,7 +37,7 @@ export function ConfirmModal({ isOpen, message, onConfirm, onCancel, destructive
               destructive ? 'bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600' : 'bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600'
             }`}
           >
-            확인
+            {t.modal.confirm}
           </button>
         </div>
       </div>
