@@ -2,6 +2,11 @@ name: 'release'
 
 on:
   workflow_dispatch:
+    inputs:
+      full-abis:
+        description: 'Build all 4 Android ABIs (default: arm64 only)'
+        type: boolean
+        default: false
   push:
     tags:
       - 'v*'
@@ -133,7 +138,8 @@ jobs:
         run: |
           pnpm tauri android init
           pnpm tauri icon src-tauri/icons/icon.png
-          pnpm tauri android build --split-per-abi
+          if [ "${{ inputs.full-abis }}" = "true" ]; then TARGET_ARGS=""; else TARGET_ARGS="-t aarch64"; fi
+          pnpm tauri android build --split-per-abi $TARGET_ARGS
 
       - name: sign APKs + AABs with release keystore
         env:
