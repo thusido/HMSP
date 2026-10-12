@@ -87,7 +87,7 @@ export function PlaylistDrawer({
             ? 'border-mint ring-2 ring-mint/30 dark:border-mint'
             : isSelected
               ? 'border-fog bg-paper-deep dark:border-graphite dark:bg-paper/5'
-              : 'border-fog hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+              : 'border-fog hover:border-gray-300 dark:border-white/10 dark:hover:border-gray-600'
         }`}
       >
         <div className="mr-2 flex flex-1 items-start gap-2 overflow-hidden">
@@ -96,7 +96,7 @@ export function PlaylistDrawer({
             <div className="flex items-center gap-1.5">
               <span
                 title={item.fileName}
-                className={`block truncate text-xs ${isPlaying ? 'font-bold text-ink dark:text-paper' : 'font-medium text-ink dark:text-gray-200'}`}
+                className={`block truncate text-xs ${isPlaying ? 'font-bold text-ink dark:text-paper' : 'font-medium text-ink dark:text-white'}`}
               >
                 {item.fileName}
               </span>
@@ -124,7 +124,7 @@ export function PlaylistDrawer({
             onManualAttachSubtitle(item);
           }}
           title={t.drawer.attachHint}
-          className="flex-shrink-0 rounded p-1 text-gray-400 hover:bg-paper-deep hover:text-gray-700 dark:hover:bg-night-hover dark:hover:text-gray-200"
+          className="flex-shrink-0 rounded p-1 text-gray-400 hover:bg-paper-deep hover:text-gray-700 dark:hover:bg-night-hover dark:hover:text-white"
         >
           <LinkIcon className="h-3.5 w-3.5" />
         </button>
@@ -133,16 +133,16 @@ export function PlaylistDrawer({
   };
 
   const drawerContent = (
-    <div className="z-30 flex h-full w-80 flex-shrink-0 flex-col border-r border-fog bg-paper select-none dark:border-gray-800 dark:bg-night">
+    <div className="z-30 flex h-full w-80 flex-shrink-0 flex-col border-r border-fog bg-paper select-none dark:border-white/10 dark:bg-night">
       <div className="flex h-12 flex-shrink-0 items-center justify-between bg-paper px-2.5 dark:bg-night">
         <div className="flex items-center gap-1.5">
-          <button type="button" onClick={onAddFiles} title={t.drawer.addFiles} aria-label={t.drawer.addFiles} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onAddFiles} title={t.drawer.addFiles} aria-label={t.drawer.addFiles} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover">
             <PlusIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onAddFolder} title={t.drawer.addFolder} aria-label={t.drawer.addFolder} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onAddFolder} title={t.drawer.addFolder} aria-label={t.drawer.addFolder} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover">
             <FolderPlusIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onCreateVirtualFolder} title={t.drawer.newFolder} aria-label={t.drawer.newFolder} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onCreateVirtualFolder} title={t.drawer.newFolder} aria-label={t.drawer.newFolder} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover">
             <FolderIcon className="h-4 w-4" />
           </button>
           <button
@@ -151,7 +151,7 @@ export function PlaylistDrawer({
             disabled={!selectedFolderId}
             title={t.drawer.rename}
             aria-label="Rename selected folder"
-            className="rounded-md border border-fog bg-paper p-1.5 transition-colors dark:border-gray-700 dark:bg-night-card disabled:cursor-not-allowed disabled:opacity-40 hover:bg-paper-deep dark:hover:bg-night-hover"
+            className="rounded-md border border-fog bg-paper p-1.5 transition-colors dark:border-white/10 dark:bg-night-card disabled:cursor-not-allowed disabled:opacity-40 hover:bg-paper-deep dark:hover:bg-night-hover"
           >
             <PencilIcon className="h-4 w-4" />
           </button>
@@ -161,7 +161,7 @@ export function PlaylistDrawer({
           onClick={onClose}
           title={t.drawer.close}
           aria-label={t.drawer.close}
-          className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover"
+          className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover"
         >
           <Bars3Icon className="h-5 w-5" />
         </button>
@@ -195,7 +195,7 @@ export function PlaylistDrawer({
                   ? 'border-mint bg-mint/20 dark:border-mint dark:bg-mint/15'
                   : isSelected
                     ? 'border-mint/70 bg-mint/10 dark:border-graphite dark:bg-paper/5'
-                    : 'border-fog bg-drawer-folder dark:border-gray-800 dark:bg-night-card/80'
+                    : 'border-fog bg-paper-deep dark:border-white/10 dark:bg-night-card/80'
               }`}
             >
               <div
@@ -203,7 +203,7 @@ export function PlaylistDrawer({
                 className="flex cursor-pointer items-center justify-between rounded px-1.5 py-1 hover:bg-black/5 dark:hover:bg-white/5"
               >
                 <div className="flex items-center gap-2 truncate">
-                  <span className="truncate text-xs font-bold text-ink dark:text-gray-200">
+                  <span className="truncate text-xs font-bold text-ink dark:text-white">
                     {`${(folderIndex + 1).toString().padStart(2, '0')}. ${folder.name}`}
                   </span>
                   <span className="font-mono text-xs text-gray-500 dark:text-gray-400">({folderItems.length})</span>
@@ -214,7 +214,7 @@ export function PlaylistDrawer({
                     e.stopPropagation();
                     setCollapsed((prev) => ({ ...prev, [folder.id]: !prev[folder.id] }));
                   }}
-                  className="px-1 text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                  className="px-1 text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
                 >
                   {isCollapsed ? t.drawer.expand : t.drawer.collapse}
                 </button>
@@ -235,10 +235,10 @@ export function PlaylistDrawer({
         })}
 
         {rootItems.length > 0 && (
-          <div className="rounded-2xl border border-fog bg-paper-deep/70 p-2 dark:border-gray-800 dark:bg-night-card/50">
+          <div className="rounded-2xl border border-fog bg-paper-deep/70 p-2 dark:border-white/10 dark:bg-night-card/50">
             <div
               onClick={() => onSelectFolder(null)}
-              className="mb-1.5 flex cursor-pointer items-center justify-between px-1 text-xs font-bold text-graphite dark:text-gray-300"
+              className="mb-1.5 flex cursor-pointer items-center justify-between px-1 text-xs font-bold text-graphite dark:text-smoke"
             >
               <span>{t.drawer.rootFiles(rootItems.length)}</span>
             </div>
@@ -256,13 +256,13 @@ export function PlaylistDrawer({
 
       <div className="flex flex-shrink-0 items-center justify-between bg-paper p-2 text-xs dark:bg-night">
         <div className="flex items-center gap-1">
-          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title={t.drawer.moveUp} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title={t.drawer.moveUp} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover">
             {t.drawer.moveUpLabel}
           </button>
-          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title={t.drawer.moveDown} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title={t.drawer.moveDown} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover">
             {t.drawer.moveDownLabel}
           </button>
-          <button type="button" onClick={onAutoSortFolders} title={t.drawer.autoSort} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onAutoSortFolders} title={t.drawer.autoSort} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover">
             {t.drawer.autoSortLabel}
           </button>
         </div>

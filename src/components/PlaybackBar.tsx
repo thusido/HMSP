@@ -45,7 +45,7 @@ function formatTime(seconds: number): string {
 }
 
 const iconBtn =
-  'rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover';
+  'rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover';
 
 /**
  * Bottom bar. Button order is strict:
@@ -91,8 +91,8 @@ export function PlaybackBar({
   const roundBtn = (enabled: boolean) =>
     `rounded-full p-1.5 transition-colors sm:p-2 ${
       enabled
-        ? 'text-ink hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover'
-        : 'cursor-not-allowed text-gray-300 dark:text-gray-700'
+        ? 'text-ink hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover'
+        : 'cursor-not-allowed text-gray-300 dark:text-white/30'
     }`;
 
   return (
@@ -125,8 +125,8 @@ export function PlaybackBar({
               {volume === 0 ? <SpeakerXMarkIcon className="h-4 w-4" /> : <SpeakerWaveIcon className="h-4 w-4" />}
             </button>
             {volumeOpen && (
-              <div className="absolute bottom-9 left-0 z-30 w-44 rounded-2xl border border-fog bg-paper p-3 dark:border-gray-700 dark:bg-night-card">
-                <div className="mb-1 flex justify-between text-xs text-graphite dark:text-gray-300">
+              <div className="absolute bottom-9 left-0 z-30 w-44 rounded-2xl border border-fog bg-paper p-3 dark:border-white/10 dark:bg-night-card">
+                <div className="mb-1 flex justify-between text-xs text-graphite dark:text-smoke">
                   <span>{t.playback.volumeLabel}</span>
                   <span className="font-semibold">{Math.round(volume * 100)}%</span>
                 </div>
@@ -148,12 +148,12 @@ export function PlaybackBar({
               type="button"
               onClick={() => setSpeedOpen((v) => !v)}
               aria-label={t.playback.speed}
-              className="rounded-md border border-fog bg-paper px-2 py-0.5 text-xs font-medium text-graphite dark:border-gray-700 dark:bg-night-card dark:text-gray-200"
+              className="rounded-md border border-fog bg-paper px-2 py-0.5 text-xs font-medium text-graphite dark:border-white/10 dark:bg-night-card dark:text-white"
             >
               {rate}x
             </button>
             {speedOpen && (
-              <div className="absolute bottom-9 left-0 z-30 w-24 rounded-2xl border border-fog bg-paper py-1 dark:border-gray-700 dark:bg-night-card">
+              <div className="absolute bottom-9 left-0 z-30 w-24 rounded-2xl border border-fog bg-paper py-1 dark:border-white/10 dark:bg-night-card">
                 {SPEED_OPTIONS.map((s) => (
                   <button
                     key={s}
@@ -165,7 +165,7 @@ export function PlaybackBar({
                     className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-xs hover:bg-paper-deep dark:hover:bg-night-hover ${
                       rate === s
                         ? 'bg-mint/20 font-bold text-ink dark:bg-mint/15 dark:text-mint'
-                        : 'text-graphite dark:text-gray-200'
+                        : 'text-graphite dark:text-white'
                     }`}
                   >
                     <span>{s}x</span>

@@ -34,7 +34,7 @@ function fontLabel(t: Dict, value: ReaderFont): string {
 
 function Stepper({ label, value, display, decreaseLabel, increaseLabel, onMinus, onPlus }: { label: string; value: string; display?: string; decreaseLabel: string; increaseLabel: string; onMinus: () => void; onPlus: () => void }) {
   const btn =
-    'flex h-7 w-7 items-center justify-center rounded-md border border-fog text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:text-gray-300 dark:hover:bg-night-hover';
+    'flex h-7 w-7 items-center justify-center rounded-md border border-fog text-graphite transition-colors hover:bg-paper-deep dark:border-white/10 dark:text-smoke dark:hover:bg-night-hover';
   return (
     <div className="flex items-center justify-between py-1">
       <span className="text-xs text-graphite dark:text-gray-400">{label}</span>
@@ -42,7 +42,7 @@ function Stepper({ label, value, display, decreaseLabel, increaseLabel, onMinus,
         <button type="button" onClick={onMinus} aria-label={decreaseLabel} className={btn}>
           <MinusIcon className="h-3.5 w-3.5" />
         </button>
-        <span className="w-12 text-center text-xs font-medium text-ink dark:text-gray-200">{display ?? value}</span>
+        <span className="w-12 text-center text-xs font-medium text-ink dark:text-white">{display ?? value}</span>
         <button type="button" onClick={onPlus} aria-label={increaseLabel} className={btn}>
           <PlusIcon className="h-3.5 w-3.5" />
         </button>
@@ -59,22 +59,22 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
     `flex items-center justify-center gap-1.5 rounded-2xl border px-3 py-2 text-xs font-medium transition-colors ${
       active
         ? 'border-mint bg-mint/15 text-ink dark:bg-mint/15 dark:text-mint'
-        : 'border-fog text-graphite hover:bg-paper-deep dark:border-gray-700 dark:text-gray-300 dark:hover:bg-night-hover'
+        : 'border-fog text-graphite hover:bg-paper-deep dark:border-white/10 dark:text-smoke dark:hover:bg-night-hover'
     }`;
   const backupBtn =
-    'flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-fog bg-paper-deep px-3 py-2 text-xs font-medium text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover';
+    'flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-fog bg-paper-deep px-3 py-2 text-xs font-medium text-graphite transition-colors hover:bg-paper-deep dark:border-white/10 dark:bg-night-card dark:text-white dark:hover:bg-night-hover';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60" onClick={onClose} aria-hidden="true" />
-      <div className="relative z-50 w-full max-w-md rounded-3xl border border-fog bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
-        <div className="flex items-center justify-between border-b border-fog pb-3 dark:border-gray-800">
+      <div className="relative z-50 w-full max-w-md rounded-3xl border border-fog bg-paper p-6 text-ink dark:border-white/10 dark:bg-night dark:text-white">
+        <div className="flex items-center justify-between border-b border-fog pb-3 dark:border-white/10">
           <h2 className="text-base font-bold">{t.settings.title}</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label={t.appBar.settings}
-            className="rounded-md p-1 text-gray-400 transition-colors hover:bg-paper-deep hover:text-gray-700 dark:hover:bg-night-hover dark:hover:text-gray-200"
+            className="rounded-md p-1 text-gray-400 transition-colors hover:bg-paper-deep hover:text-gray-700 dark:hover:bg-night-hover dark:hover:text-white"
           >
             <XMarkIcon className="h-5 w-5" />
           </button>
@@ -82,7 +82,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
 
         <div className="space-y-6 py-4">
           <div>
-            <span className="mb-2 block text-xs font-semibold text-graphite dark:text-gray-300">{t.settings.theme}</span>
+            <span className="mb-2 block text-xs font-semibold text-graphite dark:text-smoke">{t.settings.theme}</span>
             <div className="grid grid-cols-3 gap-2">
               <button type="button" onClick={() => onChangeTheme('light')} className={themeBtn(theme === 'light')}>
                 <SunIcon className="h-3.5 w-3.5" />
@@ -101,8 +101,8 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
 
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-semibold text-graphite dark:text-gray-300">{t.settings.readerFont}</span>
-              <button type="button" onClick={onResetReader} className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300">
+              <span className="text-xs font-semibold text-graphite dark:text-smoke">{t.settings.readerFont}</span>
+              <button type="button" onClick={onResetReader} className="text-xs text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-smoke">
                 {t.settings.reset}
               </button>
             </div>
@@ -121,7 +121,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
           </div>
 
           <div>
-            <span className="mb-2 block text-xs font-semibold text-graphite dark:text-gray-300">{t.settings.language}</span>
+            <span className="mb-2 block text-xs font-semibold text-graphite dark:text-smoke">{t.settings.language}</span>
             <div className="grid grid-cols-2 gap-2">
               <button type="button" onClick={() => onChangeLanguage('ko')} className={themeBtn(language === 'ko')}>
                 <span>{t.settings.langKo}</span>
@@ -133,7 +133,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
           </div>
 
           <div>
-            <span className="mb-1 block text-xs font-semibold text-graphite dark:text-gray-300">{t.settings.backupTitle}</span>
+            <span className="mb-1 block text-xs font-semibold text-graphite dark:text-smoke">{t.settings.backupTitle}</span>
             <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
               {t.settings.backupDesc}
             </p>
@@ -150,7 +150,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-3 dark:border-gray-800">
+        <div className="border-t border-gray-100 pt-3 dark:border-white/10">
           <p className="mb-2 text-left text-xs leading-relaxed text-gray-400 dark:text-gray-500">
             {t.settings.fontNotice}
           </p>
@@ -158,7 +158,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
           <button
             type="button"
             onClick={onClose}
-            className="rounded-2xl border border-fog px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:bg-paper-deep dark:border-graphite dark:text-gray-200 dark:hover:bg-night-hover"
+            className="rounded-2xl border border-fog px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:bg-paper-deep dark:border-graphite dark:text-white dark:hover:bg-night-hover"
           >
             {t.settings.close}
           </button>

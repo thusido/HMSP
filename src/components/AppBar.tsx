@@ -22,18 +22,18 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
               type="button"
               onClick={onToggleDrawer}
               aria-label={t.appBar.openDrawer}
-              className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover"
+              className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover"
             >
               <Bars3Icon className="h-5 w-5" />
             </button>
-            <span className="text-sm font-bold tracking-tight text-ink dark:text-gray-100">HMSP</span>
+            <span className="text-sm font-bold tracking-tight text-ink dark:text-white">HMSP</span>
           </div>
         )}
       </div>
 
       <div className="flex min-w-0 flex-1 items-center justify-center">
         <div className="flex w-full max-w-2xl items-center px-6 sm:px-10">
-          <span className="block truncate text-left text-xs font-semibold text-ink dark:text-gray-200 sm:text-sm">
+          <span className="block truncate text-left text-xs font-semibold text-ink dark:text-white sm:text-sm">
             {fileName || t.appBar.noFile}
           </span>
         </div>
@@ -44,7 +44,7 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
           type="button"
           onClick={onRefresh}
           aria-label={t.appBar.refresh}
-          className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover"
+          className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover"
         >
           <ArrowPathIcon className="h-4 w-4" />
         </button>
@@ -52,7 +52,7 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
           type="button"
           onClick={onOpenSettings}
           aria-label={t.appBar.settings}
-          className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover"
+          className="rounded-md p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover"
         >
           <Cog6ToothIcon className="h-4 w-4" />
         </button>

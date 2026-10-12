@@ -54,7 +54,7 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
     return (
       <main className="selectable-reader flex-1 overflow-y-auto bg-paper px-3 py-6 sm:px-6 dark:bg-night">
         <div
-          className="mx-auto min-h-full max-w-2xl rounded-3xl border border-fog/80 bg-tint px-6 py-8 text-ink sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-night-card dark:text-gray-200"
+          className="mx-auto min-h-full max-w-2xl rounded-3xl border border-fog/80 bg-tint px-6 py-8 text-ink sm:px-10 sm:py-12 dark:border-white/10 dark:bg-night-card dark:text-white"
           style={{
             fontFamily: readerFont,
             fontSize: `${readerFontSize}px`,
@@ -73,7 +73,7 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
   return (
     <main ref={containerRef} className="selectable-reader flex-1 overflow-y-auto bg-paper px-3 py-6 sm:px-6 dark:bg-night">
       <div
-        className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-3xl border border-fog/80 bg-tint px-6 py-8 text-ink sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-night-card dark:text-gray-200"
+        className="mx-auto min-h-full max-w-2xl space-y-3.5 rounded-3xl border border-fog/80 bg-tint px-6 py-8 text-ink sm:px-10 sm:py-12 dark:border-white/10 dark:bg-night-card dark:text-white"
         style={{
           fontFamily: readerFont,
           fontSize: `${readerFontSize}px`,
@@ -92,7 +92,7 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText
               className={`block w-full cursor-pointer rounded-2xl px-3.5 py-2 transition-colors duration-150 ${
                 isActive
                   ? 'bg-sunshine/85 dark:bg-yellow-900/40'
-                  : 'text-ink hover:bg-paper-deep dark:text-gray-200 dark:hover:bg-night-hover/60'
+                  : 'text-ink hover:bg-paper-deep dark:text-white dark:hover:bg-night-hover/60'
               }`}
             >
               <span>{cue.text}</span>
