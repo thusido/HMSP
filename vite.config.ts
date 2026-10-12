@@ -31,6 +31,8 @@ export default defineConfig(() => {
   }
 
   return {
+    // Relative base: served from file root (Tauri), / (preview), or /HMSP/ (GitHub Pages).
+    base: './',
     plugins,
     server: {
       port: 5173,
