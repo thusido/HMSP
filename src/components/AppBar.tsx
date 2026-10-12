@@ -1,4 +1,5 @@
 import { ArrowPathIcon, Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { type Lang, STRINGS } from '../i18n';
 
 interface AppBarProps {
   fileName?: string;
@@ -6,10 +7,12 @@ interface AppBarProps {
   onToggleDrawer: () => void;
   onRefresh: () => void;
   onOpenSettings: () => void;
+  lang: Lang;
 }
 
 /** Top bar: [DrawerToggle + HMSP] · filename (reader-column aligned) · [Refresh, Settings]. */
-export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpenSettings }: AppBarProps) {
+export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpenSettings, lang }: AppBarProps) {
+  const t = STRINGS[lang];
   return (
     <header className="flex h-12 flex-shrink-0 select-none items-center justify-between bg-chrome-light px-3 dark:bg-gray-900 sm:px-6">
       <div className="z-10 flex items-center">
@@ -18,7 +21,7 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
             <button
               type="button"
               onClick={onToggleDrawer}
-              aria-label="Open playlist drawer"
+              aria-label={t.appBar.openDrawer}
               className="rounded-md p-1.5 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800"
             >
               <Bars3Icon className="h-5 w-5" />
@@ -31,7 +34,7 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
       <div className="flex min-w-0 flex-1 items-center justify-center">
         <div className="flex w-full max-w-2xl items-center px-6 sm:px-10">
           <span className="block truncate text-left text-xs font-semibold text-gray-800 dark:text-gray-200 sm:text-sm">
-            {fileName || 'No file selected'}
+            {fileName || t.appBar.noFile}
           </span>
         </div>
       </div>
@@ -40,7 +43,7 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
         <button
           type="button"
           onClick={onRefresh}
-          aria-label="Refresh playlist references"
+          aria-label={t.appBar.refresh}
           className="rounded-md p-1.5 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800"
         >
           <ArrowPathIcon className="h-4 w-4" />
@@ -48,7 +51,7 @@ export function AppBar({ fileName, drawerOpen, onToggleDrawer, onRefresh, onOpen
         <button
           type="button"
           onClick={onOpenSettings}
-          aria-label="Settings"
+          aria-label={t.appBar.settings}
           className="rounded-md p-1.5 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800"
         >
           <Cog6ToothIcon className="h-4 w-4" />

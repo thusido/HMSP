@@ -12,6 +12,7 @@ import { usePlayback } from './features/playback/usePlayback';
 import { usePlaylist } from './features/playlist/usePlaylist';
 import { useReader } from './features/reader/useReader';
 import { SETTINGS_KEY, READER_FONT_STACKS, useSettings } from './features/settings/useSettings';
+import { STRINGS } from './i18n';
 import {
   calculateNextSubtitleTime,
   calculatePrevSubtitleTime,
@@ -42,7 +43,8 @@ export default function App() {
   const [notice, setNotice] = useState<NoticeState | null>(null);
 
   const { settings, updateSettings, resetReaderSettings } = useSettings();
-  const playlist = usePlaylist();
+  const t = STRINGS[settings.language];
+  const playlist = usePlaylist(settings.language);
   const { items, currentItem } = playlist;
   const notify = useCallback((message: string) => setNotice({ id: Date.now(), message }), []);
 
@@ -62,7 +64,7 @@ export default function App() {
         file = null;
       }
       if (!file) {
-        notify(`'${item.fileName}' 파일 바이너리를 찾을 수 없습니다. 폴더를 다시 드롭하거나 새로고침으로 연결해주세요.`);
+        notify(t.app.binaryMissing(item.fileName));
         return;
       }
       playbackRef.current?.loadFile(file);
@@ -153,10 +155,10 @@ export default function App() {
       }
       if (result.rootFiles.length > 0) added += await playlist.intake(result.rootFiles, target ?? undefined);
       if (added === 0) {
-        notify('드롭한 항목에서 지원 형식(wav/mp3/m4a/vtt/srt) 파일을 찾지 못했습니다.');
+        notify(t.app.dropNoMedia);
       }
     } catch {
-      notify('드롭한 항목을 처리하는 중 오류가 발생했습니다.');
+      notify(t.app.dropError);
     }
   };
 
@@ -165,7 +167,7 @@ export default function App() {
       const files = await playlist.pickMediaFiles();
       if (files.length > 0) await playlist.intake(files, playlist.selectedFolderId ?? undefined);
     } catch {
-      notify('파일을 가져오는 중 오류가 발생했습니다.');
+      notify(t.app.filesError);
     }
   };
 
@@ -174,23 +176,23 @@ export default function App() {
       const res = await playlist.pickFolderResult();
       if (!res) return;
       const { folder } = await playlist.intakeToFolder(res.folderName, res.files);
-      if (!folder) notify('선택한 폴더에서 지원 형식(wav/mp3/m4a/vtt/srt) 파일을 찾지 못했습니다.');
+      if (!folder) notify(t.app.folderEmpty);
     } catch {
-      notify('폴더를 가져오는 중 오류가 발생했습니다.');
+      notify(t.app.folderError);
     }
   };
 
   const handleRefresh = async () => {
     const result = await playlist.refreshFromFolder();
-    if (result === null) notify('모든 항목의 미디어 파일이 정상 연결되어 있습니다.');
-    else if (result.error) notify(`재연결 중 오류가 발생했습니다: ${result.error}`);
+    if (result === null) notify(t.app.refreshOk);
+    else if (result.error) notify(t.app.refreshError(result.error));
     else if (!result.folderName) return; // cancelled
     else {
-      const failedNote = result.failed > 0 ? ` (${result.failed}개 읽기 실패)` : '';
+      const failedNote = result.failed > 0 ? t.app.failedNote(result.failed) : '';
       if (result.affected === 0) {
-        notify(`'${result.folderName}' (선택 폴더 트리)에서 일치하는 파일을 찾지 못했습니다.${failedNote}`);
+        notify(t.app.refreshMiss(result.folderName, failedNote));
       } else {
-        notify(`'${result.folderName}' 폴더에서 ${result.affected}개 항목을 재연결했습니다.${failedNote}`);
+        notify(t.app.refreshDone(result.folderName, result.affected, failedNote));
       }
     }
   };
@@ -199,7 +201,7 @@ export default function App() {
     if (playlist.selectedItemId) {
       const item = items.find((i) => i.id === playlist.selectedItemId);
       setConfirm({
-        message: `'${item?.fileName}' 항목을 삭제하시겠습니까?`,
+        message: t.app.deleteItem(item?.fileName ?? ''),
         destructive: true,
         onConfirm: () => {
           if (playlist.currentPlayingId === playlist.selectedItemId) playback.pause();
@@ -212,7 +214,7 @@ export default function App() {
     if (playlist.selectedFolderId) {
       const folder = playlist.folders.find((f) => f.id === playlist.selectedFolderId);
       setConfirm({
-        message: `'${folder?.name}' 폴더와 내부 항목들을 삭제하시겠습니까?`,
+        message: t.app.deleteFolder(folder?.name ?? ''),
         destructive: true,
         onConfirm: () => {
           playback.pause();
@@ -225,7 +227,7 @@ export default function App() {
 
   const handleDeleteAll = () => {
     setConfirm({
-      message: '플레이리스트 전체를 삭제하시겠습니까?',
+      message: t.app.deleteAll,
       destructive: true,
       onConfirm: () => {
         playback.pause();
@@ -241,19 +243,19 @@ export default function App() {
       const target = files[0];
       if (!target) return;
       const ok = await playlist.attachSubtitle(item.id, target);
-      notify(ok ? `'${target.name}' 자막을 연결했습니다.` : '자막 파일(vtt, srt)을 선택해주세요.');
+      notify(ok ? t.app.attachDone(target.name) : t.app.attachNeed);
     } catch {
-      notify('자막 파일을 연결하는 중 오류가 발생했습니다.');
+      notify(t.app.attachError);
     }
   };
 
   const handleExport = async () => {
     try {
       await playlist.exportJson();
-      notify('플레이리스트 구조를 백업했습니다.');
+      notify(t.app.exportDone);
     } catch (err) {
       console.warn('Export failed:', err);
-      notify('플레이리스트 백업에 실패했습니다.');
+      notify(t.app.exportFail);
     }
   };
 
@@ -263,14 +265,14 @@ export default function App() {
         const ok = await playlist.importJson();
         setConfirm(null);
         setIsSettingsOpen(false);
-        if (ok) notify('플레이리스트를 복구했습니다.\n새로고침으로 미디어를 재연결해주세요.');
+        if (ok) notify(t.app.importDone);
       } catch {
         setConfirm(null);
-        notify('플레이리스트 복구를 실패했습니다.');
+        notify(t.app.importFail);
       }
     };
     if (items.length > 0 || playlist.folders.length > 0) {
-      setConfirm({ message: '기존 플레이리스트를 대체합니다. 계속하시겠습니까?', onConfirm: doImport });
+      setConfirm({ message: t.app.importReplace, onConfirm: doImport });
     } else {
       await doImport();
     }
@@ -303,8 +305,8 @@ export default function App() {
         onAddFolder={handleAddFolder}
         onCreateVirtualFolder={() =>
           setPrompt({
-            message: '새 플레이리스트 폴더 이름을 입력하세요:',
-            defaultValue: `새 폴더 ${playlist.folders.length + 1}`,
+            message: t.app.createFolder,
+            defaultValue: t.app.newFolderDefault(playlist.folders.length + 1),
             onConfirm: (value) => {
               if (value.trim()) playlist.createFolder(value);
               setPrompt(null);
@@ -315,7 +317,7 @@ export default function App() {
           const folder = playlist.folders.find((f) => f.id === playlist.selectedFolderId);
           if (!folder) return;
           setPrompt({
-            message: '폴더 이름을 변경하세요:',
+            message: t.app.renameFolder,
             defaultValue: folder.name,
             onConfirm: (value) => {
               playlist.renameFolder(folder.id, value);
@@ -329,6 +331,7 @@ export default function App() {
         onDeleteSelected={handleDeleteSelected}
         onDeleteAll={handleDeleteAll}
         onManualAttachSubtitle={handleManualAttach}
+        lang={settings.language}
       />
 
       <div className="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden">
@@ -338,6 +341,7 @@ export default function App() {
           onToggleDrawer={() => setIsDrawerOpen((v) => !v)}
           onRefresh={handleRefresh}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          lang={settings.language}
         />
         <MainReader
           cues={cues}
@@ -348,6 +352,7 @@ export default function App() {
           readerFontSize={settings.fontSize}
           readerLetterSpacing={settings.letterSpacing}
           readerLineHeight={settings.lineHeight}
+          lang={settings.language}
         />
         <PlaybackBar
           currentTime={playback.currentTime}
@@ -375,6 +380,7 @@ export default function App() {
           onChangeSpeed={playback.setRate}
           onChangeVolume={playback.setVolume}
           onToggleRepeat={playback.toggleRepeat}
+          lang={settings.language}
         />
       </div>
 
@@ -389,8 +395,11 @@ export default function App() {
         lineHeight={settings.lineHeight}
         onUpdateReader={(patch) => updateSettings(patch)}
         onResetReader={resetReaderSettings}
+        language={settings.language}
+        onChangeLanguage={(language) => updateSettings({ language })}
         onExportPlaylist={handleExport}
         onImportPlaylist={handleImport}
+        lang={settings.language}
       />
       <ConfirmModal
         isOpen={confirm !== null}
@@ -398,6 +407,7 @@ export default function App() {
         destructive={confirm?.destructive}
         onConfirm={() => confirm?.onConfirm()}
         onCancel={() => setConfirm(null)}
+        lang={settings.language}
       />
       <PromptModal
         isOpen={prompt !== null}
@@ -405,6 +415,7 @@ export default function App() {
         defaultValue={prompt?.defaultValue ?? ''}
         onConfirm={(v) => prompt?.onConfirm(v)}
         onCancel={() => setPrompt(null)}
+        lang={settings.language}
       />
       <Notice notice={notice} />
     </div>

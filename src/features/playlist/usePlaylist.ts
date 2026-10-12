@@ -5,6 +5,7 @@ import type { PlatformAdapter } from '../../services/platform/PlatformAdapter';
 import { isSubtitleFile } from '../../services/playlist/PlaylistMatcher';
 import { parseSubtitle } from '../../services/subtitle/SubtitleParser';
 import { intakeFiles } from '../../services/playlist/intake';
+import { type Lang, STRINGS } from '../../i18n';
 
 const STORAGE_KEY = 'HMSP_V1_PLAYLIST_SCHEMA';
 
@@ -34,7 +35,8 @@ function getSortedFolders(folders: PlaylistFolder[]): PlaylistFolder[] {
 }
 
 /** Owns folders/items/selection + intake + JSON persistence. UI dialogs stay in App. */
-export function usePlaylist() {
+export function usePlaylist(lang: Lang = 'ko') {
+  const t = STRINGS[lang];
   const [folders, setFolders] = useState<PlaylistFolder[]>(() => loadPersisted().folders);
   const [items, setItems] = useState<AudioItem[]>(() => loadPersisted().items);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
@@ -265,17 +267,17 @@ export function usePlaylist() {
         if (!displayName) displayName = folderName ?? '';
       }
       // Never silent: name the first wanted folder so the UI can report a miss.
-      if (!displayName) displayName = wanted[0]?.folderName ?? '선택한 폴더';
+      if (!displayName) displayName = wanted[0]?.folderName ?? t.app.defaultFolder;
       return { folderName: displayName, affected, failed: search.failed, error: null };
     } catch (err) {
       return {
-        folderName: wanted[0]?.folderName ?? '선택한 폴더',
+        folderName: wanted[0]?.folderName ?? t.app.defaultFolder,
         affected: 0,
         failed: 0,
         error: err instanceof Error ? err.message : String(err),
       };
     }
-  }, [getAdapter, intake]);
+  }, [getAdapter, intake, t]);
 
   /**
    * Resolves playable bytes for one item. Real Files (web/DnD) pass through;

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { AppTheme } from '../../types';
+import { type Lang, systemLang } from '../../i18n';
 
 /** Reader typeface options (Phase 2 wires actual @font-face files). */
 export type ReaderFont = 'pretendard' | 'noto-serif-kr' | 'suit' | 'ridibatang';
-/** UI language ('en' lands in Phase 3; 'ja' later by union + dict). */
-export type AppLanguage = 'ko';
+/** UI language ('ja' later: extend union + add dict, nothing else). */
+export type AppLanguage = Lang;
 
 export interface AppSettings {
   theme: AppTheme;
@@ -23,7 +24,7 @@ const DEFAULTS: AppSettings = {
   fontSize: 16,
   letterSpacing: 0,
   lineHeight: 150,
-  language: 'ko',
+  language: systemLang(),
 };
 
 const READER_FONTS: ReaderFont[] = ['pretendard', 'noto-serif-kr', 'suit', 'ridibatang'];
@@ -54,7 +55,7 @@ function loadSettings(): AppSettings {
       fontSize: typeof parsed.fontSize === 'number' ? parsed.fontSize : DEFAULTS.fontSize,
       letterSpacing: typeof parsed.letterSpacing === 'number' ? parsed.letterSpacing : DEFAULTS.letterSpacing,
       lineHeight: typeof parsed.lineHeight === 'number' ? parsed.lineHeight : DEFAULTS.lineHeight,
-      language: parsed.language === 'ko' ? 'ko' : DEFAULTS.language,
+      language: parsed.language === 'en' ? 'en' : DEFAULTS.language,
     };
   } catch {
     return DEFAULTS;
@@ -80,7 +81,8 @@ export function useSettings() {
       settings.theme === 'dark' ||
       (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     document.documentElement.classList.toggle('dark', isDark);
-  }, [settings.theme]);
+    document.documentElement.lang = settings.language;
+  }, [settings.theme, settings.language]);
 
   return { settings, updateSettings, resetReaderSettings };
 }

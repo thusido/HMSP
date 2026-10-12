@@ -12,6 +12,7 @@ import {
 import type { AudioItem, PlaylistFolder } from '../types';
 import { compareFileName } from '../services/playlist/compare';
 import { shouldUseSafeArea } from '../services/platform/PlatformAdapter';
+import { type Lang, STRINGS } from '../i18n';
 
 interface PlaylistDrawerProps {
   isOpen: boolean;
@@ -37,6 +38,7 @@ interface PlaylistDrawerProps {
   onDeleteSelected: () => void;
   onDeleteAll: () => void;
   onManualAttachSubtitle: (item: AudioItem) => void;
+  lang: Lang;
 }
 
 export function PlaylistDrawer({
@@ -63,7 +65,9 @@ export function PlaylistDrawer({
   onDeleteSelected,
   onDeleteAll,
   onManualAttachSubtitle,
+  lang,
 }: PlaylistDrawerProps) {
+  const t = STRINGS[lang];
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   if (!isOpen) return null;
@@ -97,7 +101,7 @@ export function PlaylistDrawer({
                 {item.fileName}
               </span>
               {item.isMissing && (
-                <span title="원본 파일을 찾을 수 없습니다" className="flex-shrink-0">
+                <span title={t.drawer.missingFile} className="flex-shrink-0">
                   <ExclamationCircleIcon className="h-3.5 w-3.5 text-red-500" />
                 </span>
               )}
@@ -108,7 +112,7 @@ export function PlaylistDrawer({
                   {item.subtitleFileName}
                 </span>
               ) : (
-                <span className="text-gray-400 italic dark:text-gray-500">연결된 자막 파일 없음</span>
+                <span className="text-gray-400 italic dark:text-gray-500">{t.drawer.noSubtitle}</span>
               )}
             </div>
           </div>
@@ -119,7 +123,7 @@ export function PlaylistDrawer({
             e.stopPropagation();
             onManualAttachSubtitle(item);
           }}
-          title="자막 파일 수동 연결/변경"
+          title={t.drawer.attachHint}
           className="flex-shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-gray-200"
         >
           <LinkIcon className="h-3.5 w-3.5" />
@@ -132,20 +136,20 @@ export function PlaylistDrawer({
     <div className="z-30 flex h-full w-80 flex-shrink-0 flex-col border-r border-gray-200 bg-drawer-light select-none dark:border-gray-800 dark:bg-gray-900">
       <div className="flex h-12 flex-shrink-0 items-center justify-between bg-chrome-light px-2.5 dark:bg-gray-900">
         <div className="flex items-center gap-1.5">
-          <button type="button" onClick={onAddFiles} title="파일 추가" aria-label="Add files" className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+          <button type="button" onClick={onAddFiles} title={t.drawer.addFiles} aria-label={t.drawer.addFiles} className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
             <PlusIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onAddFolder} title="폴더 추가 (1depth 스캔)" aria-label="Add folder" className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+          <button type="button" onClick={onAddFolder} title={t.drawer.addFolder} aria-label={t.drawer.addFolder} className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
             <FolderPlusIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onCreateVirtualFolder} title="가상 플레이리스트 폴더 생성" aria-label="Create virtual folder" className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+          <button type="button" onClick={onCreateVirtualFolder} title={t.drawer.newFolder} aria-label={t.drawer.newFolder} className="rounded-md border border-gray-300 bg-white p-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
             <FolderIcon className="h-4 w-4" />
           </button>
           <button
             type="button"
             onClick={onRenameSelectedFolder}
             disabled={!selectedFolderId}
-            title="선택된 폴더 이름 수정"
+            title={t.drawer.rename}
             aria-label="Rename selected folder"
             className="rounded-md border border-gray-300 bg-white p-1.5 transition-colors dark:border-gray-700 dark:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
@@ -155,8 +159,8 @@ export function PlaylistDrawer({
         <button
           type="button"
           onClick={onClose}
-          title="서랍 닫기"
-          aria-label="Close drawer"
+          title={t.drawer.close}
+          aria-label={t.drawer.close}
           className="rounded-md p-1.5 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800"
         >
           <Bars3Icon className="h-5 w-5" />
@@ -212,14 +216,14 @@ export function PlaylistDrawer({
                   }}
                   className="px-1 text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
                 >
-                  {isCollapsed ? '펼치기' : '접기'}
+                  {isCollapsed ? t.drawer.expand : t.drawer.collapse}
                 </button>
               </div>
               {!isCollapsed && (
                 <div className="mt-1.5 space-y-1.5 pl-1">
                   {folderItems.length === 0 ? (
                     <div className="rounded bg-white/60 py-2 text-center text-xs text-gray-400 dark:bg-gray-900/60">
-                      오디오 파일이 없습니다
+                      {t.drawer.noAudio}
                     </div>
                   ) : (
                     folderItems.map(renderAudioCard)
@@ -236,7 +240,7 @@ export function PlaylistDrawer({
               onClick={() => onSelectFolder(null)}
               className="mb-1.5 flex cursor-pointer items-center justify-between px-1 text-xs font-bold text-gray-600 dark:text-gray-300"
             >
-              <span>루트 파일 ({rootItems.length})</span>
+              <span>{t.drawer.rootFiles(rootItems.length)}</span>
             </div>
             <div className="space-y-1.5 pl-1">{rootItems.map(renderAudioCard)}</div>
           </div>
@@ -244,30 +248,30 @@ export function PlaylistDrawer({
 
         {folders.length === 0 && rootItems.length === 0 && (
           <div className="flex h-40 flex-col items-center justify-center px-4 text-center text-xs text-gray-400 dark:text-gray-500">
-            <p className="mb-1">플레이리스트가 비어 있습니다.</p>
-            <p className="text-xs">상단 버튼 또는 파일을 드래그하여 오디오/자막을 추가하세요.</p>
+            <p className="mb-1">{t.drawer.emptyTitle}</p>
+            <p className="text-xs">{t.drawer.emptyHint}</p>
           </div>
         )}
       </div>
 
       <div className="flex flex-shrink-0 items-center justify-between bg-chrome-light p-2 text-xs dark:bg-gray-900">
         <div className="flex items-center gap-1">
-          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title="선택된 폴더 위로 이동" className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-            위로
+          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title={t.drawer.moveUp} className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            {t.drawer.moveUpLabel}
           </button>
-          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title="선택된 폴더 아래로 이동" className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-            아래로
+          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title={t.drawer.moveDown} className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            {t.drawer.moveDownLabel}
           </button>
-          <button type="button" onClick={onAutoSortFolders} title="폴더 이름순 자동 정렬" className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-            자동정렬
+          <button type="button" onClick={onAutoSortFolders} title={t.drawer.autoSort} className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+            {t.drawer.autoSortLabel}
           </button>
         </div>
         <div className="flex items-center gap-1">
-          <button type="button" onClick={onDeleteSelected} disabled={!selectedFolderId && !selectedItemId} title="선택된 항목 삭제" className="rounded border border-red-200 bg-white px-2 py-1 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-900/60 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/40">
-            삭제
+          <button type="button" onClick={onDeleteSelected} disabled={!selectedFolderId && !selectedItemId} title={t.drawer.deleteSelected} className="rounded border border-red-200 bg-white px-2 py-1 text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-red-900/60 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/40">
+            {t.drawer.deleteLabel}
           </button>
-          <button type="button" onClick={onDeleteAll} title="전체 플레이리스트 비우기" className="rounded border border-red-300 bg-white px-2 py-1 font-medium text-red-700 hover:bg-red-50 dark:border-red-800 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/50">
-            전체삭제
+          <button type="button" onClick={onDeleteAll} title={t.drawer.deleteAll} className="rounded border border-red-300 bg-white px-2 py-1 font-medium text-red-700 hover:bg-red-50 dark:border-red-800 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/50">
+            {t.drawer.deleteAllLabel}
           </button>
         </div>
       </div>

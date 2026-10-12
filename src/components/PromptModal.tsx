@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { type Lang, STRINGS } from '../i18n';
 
 interface PromptModalProps {
   isOpen: boolean;
@@ -6,10 +7,12 @@ interface PromptModalProps {
   defaultValue?: string;
   onConfirm: (value: string) => void;
   onCancel: () => void;
+  lang: Lang;
 }
 
 /** Async replacement for window.prompt. */
-export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onCancel }: PromptModalProps) {
+export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onCancel, lang }: PromptModalProps) {
+  const t = STRINGS[lang];
   const [value, setValue] = useState(defaultValue);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,14 +45,14 @@ export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onC
             onClick={onCancel}
             className="rounded-lg bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
           >
-            취소
+            {t.modal.cancel}
           </button>
           <button
             type="button"
             onClick={() => onConfirm(value)}
             className="rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700"
           >
-            확인
+            {t.modal.confirm}
           </button>
         </div>
       </div>

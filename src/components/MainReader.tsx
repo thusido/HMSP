@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { SubtitleCue } from '../types';
+import { type Lang, STRINGS } from '../i18n';
 
 interface MainReaderProps {
   cues: SubtitleCue[];
@@ -10,10 +11,12 @@ interface MainReaderProps {
   readerFontSize: number;
   readerLetterSpacing: number;
   readerLineHeight: number;
+  lang: Lang;
 }
 
 /** Document-flow reader. Active cue highlighted; text selection wins over click-to-seek. */
-export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFont, readerFontSize, readerLetterSpacing, readerLineHeight }: MainReaderProps) {
+export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFont, readerFontSize, readerLetterSpacing, readerLineHeight, lang }: MainReaderProps) {
+  const t = STRINGS[lang];
   const containerRef = useRef<HTMLElement>(null);
   const activeElementRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,7 +42,7 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFon
     return (
       <main className="flex flex-1 items-center justify-center bg-[#F0F2F5] p-8 text-gray-400 select-none dark:bg-gray-950 dark:text-gray-500">
         <p className="text-sm">
-          {!hasAudio ? '재생할 오디오 파일을 선택해주세요.' : '연결된 자막이 없거나 자막을 표시할 수 없습니다.'}
+          {!hasAudio ? t.reader.noAudio : t.reader.noSubtitle}
         </p>
       </main>
     );
@@ -63,7 +66,7 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFon
               key={cue.id}
               ref={isActive ? (el) => void (activeElementRef.current = el) : undefined}
               onClick={() => handleCueClick(cue)}
-              title="클릭하여 이 문장부터 재생"
+              title={t.reader.cueHint}
               className={`block w-full cursor-pointer rounded-lg px-3.5 py-2 transition-colors duration-150 ${
                 isActive
                   ? 'bg-[#FEF08A]/85 text-[1.1em] font-bold text-gray-900 dark:bg-yellow-900/40 dark:text-yellow-100'

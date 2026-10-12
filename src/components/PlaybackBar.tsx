@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { SPEED_OPTIONS } from '../features/playback/usePlayback';
 import type { PlaybackRepeatMode, PlaybackSpeed } from '../types';
+import { type Lang, STRINGS } from '../i18n';
 
 interface PlaybackBarProps {
   currentTime: number;
@@ -33,6 +34,7 @@ interface PlaybackBarProps {
   onChangeSpeed: (speed: PlaybackSpeed) => void;
   onChangeVolume: (volume: number) => void;
   onToggleRepeat: () => void;
+  lang: Lang;
 }
 
 function formatTime(seconds: number): string {
@@ -69,7 +71,9 @@ export function PlaybackBar({
   onChangeSpeed,
   onChangeVolume,
   onToggleRepeat,
+  lang,
 }: PlaybackBarProps) {
+  const t = STRINGS[lang];
   const [volumeOpen, setVolumeOpen] = useState(false);
   const [speedOpen, setSpeedOpen] = useState(false);
   const volumeRef = useRef<HTMLDivElement>(null);
@@ -106,7 +110,7 @@ export function PlaybackBar({
               step={0.1}
               value={currentTime}
               onChange={(e) => onSeek(parseFloat(e.target.value))}
-              aria-label="Seek time"
+              aria-label={t.playback.seek}
               className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-gray-300 accent-blue-600 dark:bg-gray-700"
             />
           </div>
@@ -117,13 +121,13 @@ export function PlaybackBar({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="relative" ref={volumeRef}>
-            <button type="button" onClick={() => setVolumeOpen((v) => !v)} aria-label="Volume settings" className={iconBtn}>
+            <button type="button" onClick={() => setVolumeOpen((v) => !v)} aria-label={t.playback.volume} className={iconBtn}>
               {volume === 0 ? <SpeakerXMarkIcon className="h-4 w-4" /> : <SpeakerWaveIcon className="h-4 w-4" />}
             </button>
             {volumeOpen && (
               <div className="absolute bottom-9 left-0 z-30 w-44 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-800">
                 <div className="mb-1 flex justify-between text-xs text-gray-600 dark:text-gray-300">
-                  <span>Volume</span>
+                  <span>{t.playback.volumeLabel}</span>
                   <span className="font-semibold">{Math.round(volume * 100)}%</span>
                 </div>
                 <input
@@ -143,7 +147,7 @@ export function PlaybackBar({
             <button
               type="button"
               onClick={() => setSpeedOpen((v) => !v)}
-              aria-label="Playback speed"
+              aria-label={t.playback.speed}
               className="rounded-md border border-gray-300 bg-white px-2 py-0.5 text-xs font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
             >
               {rate}x
@@ -174,24 +178,24 @@ export function PlaybackBar({
         </div>
 
         <div className="flex items-center gap-1 sm:gap-3">
-          <button type="button" disabled={!canPrevFile} onClick={onPrevFile} aria-label="Previous file" className={roundBtn(canPrevFile)}>
+          <button type="button" disabled={!canPrevFile} onClick={onPrevFile} aria-label={t.playback.prevFile} className={roundBtn(canPrevFile)}>
             <BackwardIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
-          <button type="button" disabled={!canPrevSubtitle} onClick={onPrevSubtitle} aria-label="Previous subtitle" className={roundBtn(canPrevSubtitle)}>
+          <button type="button" disabled={!canPrevSubtitle} onClick={onPrevSubtitle} aria-label={t.playback.prevSubtitle} className={roundBtn(canPrevSubtitle)}>
             <ChevronLeftIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <button
             type="button"
             onClick={onTogglePlay}
-            aria-label={isPlaying ? 'Pause' : 'Play'}
+            aria-label={isPlaying ? t.playback.pause : t.playback.play}
             className="rounded-full bg-blue-600 p-2 text-white shadow-sm transition-transform active:scale-95 sm:p-2.5"
           >
             {isPlaying ? <PauseIcon className="h-5 w-5 sm:h-6 sm:w-6" /> : <PlayIcon className="h-5 w-5 translate-x-0.5 sm:h-6 sm:w-6" />}
           </button>
-          <button type="button" disabled={!canNextSubtitle} onClick={onNextSubtitle} aria-label="Next subtitle" className={roundBtn(canNextSubtitle)}>
+          <button type="button" disabled={!canNextSubtitle} onClick={onNextSubtitle} aria-label={t.playback.nextSubtitle} className={roundBtn(canNextSubtitle)}>
             <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
-          <button type="button" disabled={!canNextFile} onClick={onNextFile} aria-label="Next file" className={roundBtn(canNextFile)}>
+          <button type="button" disabled={!canNextFile} onClick={onNextFile} aria-label={t.playback.nextFile} className={roundBtn(canNextFile)}>
             <ForwardIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
@@ -200,7 +204,7 @@ export function PlaybackBar({
           <button
             type="button"
             onClick={onToggleRepeat}
-            aria-label="Toggle repeat mode"
+            aria-label={t.playback.repeat}
             className={`rounded-md p-1.5 transition-colors ${
               repeatMode === 'repeat-one'
                 ? 'bg-blue-100 font-bold text-blue-600 dark:bg-blue-950/60 dark:text-blue-400'
