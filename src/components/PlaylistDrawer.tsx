@@ -87,7 +87,7 @@ export function PlaylistDrawer({
             ? 'border-mint ring-2 ring-mint/30 dark:border-mint'
             : isSelected
               ? 'border-fog bg-paper-deep dark:border-graphite dark:bg-paper/5'
-              : 'border-fog hover:border-gray-300 dark:border-white/10 dark:hover:border-gray-600'
+              : 'border-fog hover:border-gray-300 dark:border-white/10 dark:hover:border-white/20'
         }`}
       >
         <div className="mr-2 flex flex-1 items-start gap-2 overflow-hidden">
