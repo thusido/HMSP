@@ -1,6 +1,6 @@
 import type { AudioItem, SubtitleCue } from '../../types';
 import { getFilePath } from '../platform/PlatformAdapter';
-import { isAudioFile, isSubtitleFile, matchSubtitleForAudio } from './PlaylistMatcher';
+import { isAudioFile, isPlainTextFile, isSubtitleFile, matchSubtitleForAudio, matchTextForAudio } from './PlaylistMatcher';
 import { parseSubtitle } from '../subtitle/SubtitleParser';
 
 function newItemId(): string {
@@ -14,6 +14,18 @@ async function parseSubtitleFiles(subtitleFiles: File[]): Promise<Map<string, { 
       cache.set(sub.name, { file: sub, cues: parseSubtitle(await sub.text(), sub.name) });
     } catch (err) {
       console.warn('Subtitle parse error:', err);
+    }
+  }
+  return cache;
+}
+
+async function parseTextFiles(textFiles: File[]): Promise<Map<string, string>> {
+  const cache = new Map<string, string>();
+  for (const f of textFiles) {
+    try {
+      cache.set(f.name, await f.text());
+    } catch (err) {
+      console.warn('Text read error:', err);
     }
   }
   return cache;
@@ -36,11 +48,13 @@ export async function intakeFiles(
     (targetFolderId === null ? folderId == null : folderId === targetFolderId);
   const audioFiles = files.filter((f) => isAudioFile(f.name));
   const subtitleFiles = files.filter((f) => isSubtitleFile(f.name));
-  if (audioFiles.length === 0 && subtitleFiles.length === 0) {
+  const textFiles = files.filter((f) => isPlainTextFile(f.name));
+  if (audioFiles.length === 0 && subtitleFiles.length === 0 && textFiles.length === 0) {
     return { items: prevItems, affectedCount: 0 };
   }
 
   const cache = await parseSubtitleFiles(subtitleFiles);
+  const textCache = await parseTextFiles(textFiles);
   const updated = [...prevItems];
   const newlyAdded: AudioItem[] = [];
   const connectedThisCall = new Set<string>();
@@ -50,6 +64,13 @@ export async function intakeFiles(
     const match = matchSubtitleForAudio(audioFile.name, subtitleFiles);
     const cached = match.matchedSubtitle ? cache.get(match.matchedSubtitle.name) : undefined;
     const subPatch = cached ? { subtitleFileName: cached.file.name, subtitles: cached.cues } : {};
+    // Cued subtitles win; plain text fills items that matched nothing.
+    const textFile = Object.keys(subPatch).length === 0 ? matchTextForAudio(audioFile.name, textFiles) : undefined;
+    const textContent = textFile ? textCache.get(textFile.name) : undefined;
+    const textPatch =
+      textContent !== undefined && textFile
+        ? { plainTextFileName: textFile.name, plainText: textContent, subtitles: [] as SubtitleCue[] }
+        : {};
     const filePath = getFilePath(audioFile);
 
     if (reconnectOnly) {
@@ -58,7 +79,7 @@ export async function intakeFiles(
       for (let i = 0; i < updated.length; i++) {
         const it = updated[i];
         if (it.fileName === audioFile.name && inScope(it.folderId) && it.isMissing && !connectedThisCall.has(it.id)) {
-          updated[i] = { ...it, file: audioFile, isMissing: false, ...subPatch, ...(filePath ? { filePath } : {}) };
+          updated[i] = { ...it, file: audioFile, isMissing: false, ...subPatch, ...textPatch, ...(filePath ? { filePath } : {}) };
           connectedThisCall.add(it.id);
           affectedCount++;
         }
@@ -68,7 +89,7 @@ export async function intakeFiles(
 
     const existingIdx = updated.findIndex((it) => it.fileName === audioFile.name && inScope(it.folderId));
     if (existingIdx >= 0) {
-      updated[existingIdx] = { ...updated[existingIdx], file: audioFile, isMissing: false, ...subPatch, ...(filePath ? { filePath } : {}) };
+      updated[existingIdx] = { ...updated[existingIdx], file: audioFile, isMissing: false, ...subPatch, ...textPatch, ...(filePath ? { filePath } : {}) };
       affectedCount++;
     } else {
       newlyAdded.push({
@@ -78,6 +99,7 @@ export async function intakeFiles(
         file: audioFile,
         ...(filePath ? { filePath } : {}),
         ...subPatch,
+        ...textPatch,
         folderId: typeof targetFolderId === 'string' ? targetFolderId : undefined,
         isMissing: false,
       });
@@ -95,6 +117,21 @@ export async function intakeFiles(
       const cached = match.matchedSubtitle ? cache.get(match.matchedSubtitle.name) : undefined;
       if (cached) {
         updated[i] = { ...item, subtitleFileName: cached.file.name, subtitles: cached.cues };
+        affectedCount++;
+      }
+    }
+  }
+
+  // Lone text files also match items that still lack subtitles.
+  if (textFiles.length > 0) {
+    for (let i = 0; i < updated.length; i++) {
+      const item = updated[i];
+      if (item.subtitles?.length || item.plainText) continue;
+      if (!inScope(item.folderId)) continue;
+      const textFile = matchTextForAudio(item.fileName, textFiles);
+      const textContent = textFile ? textCache.get(textFile.name) : undefined;
+      if (textContent !== undefined && textFile) {
+        updated[i] = { ...item, plainTextFileName: textFile.name, plainText: textContent, subtitles: [] };
         affectedCount++;
       }
     }

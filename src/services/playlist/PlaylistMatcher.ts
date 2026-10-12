@@ -1,5 +1,6 @@
 const AUDIO_EXTENSIONS = ['.wav', '.mp3', '.m4a'];
 const SUBTITLE_EXTENSIONS = ['.vtt', '.srt'];
+const PLAIN_TEXT_EXTENSIONS = ['.txt'];
 
 function stripExtension(fileName: string, extensions: string[]): string {
   const lower = fileName.toLowerCase();
@@ -23,6 +24,12 @@ export function isAudioFile(fileName: string): boolean {
 
 export function isSubtitleFile(fileName: string): boolean {
   return stripSubtitleExtension(fileName) !== fileName;
+}
+
+/** Plain-text reader files: linkable like subtitles, but carry no cues. */
+export function isPlainTextFile(fileName: string): boolean {
+  const lower = fileName.toLowerCase();
+  return PLAIN_TEXT_EXTENSIONS.some((ext) => lower.endsWith(ext));
 }
 
 /**
@@ -49,4 +56,14 @@ export function matchSubtitleForAudio(audioFileName: string, subtitleFiles: File
     return { matchedSubtitle: matched[0], matchedSubtitleName: matched[0].name, isAmbiguous: false };
   }
   return { isAmbiguous: matched.length > 1 };
+}
+
+/** Same stem rule for plain text (audio.wav + audio.txt). Single match wins. */
+export function matchTextForAudio(audioFileName: string, textFiles: File[]): File | undefined {
+  const cleanAudio = stripAudioExtension(audioFileName).toLowerCase();
+  const matched = textFiles.filter((f) => {
+    const base = f.name.toLowerCase().replace(/\.txt$/, '');
+    return cleanAudio === base || audioFileName.toLowerCase() === base;
+  });
+  return matched.length === 1 ? matched[0] : undefined;
 }

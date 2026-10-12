@@ -107,9 +107,9 @@ export function PlaylistDrawer({
               )}
             </div>
             <div className="mt-0.5 truncate text-xs">
-              {item.subtitleFileName ? (
-                <span title={item.subtitleFileName} className="text-gray-500 dark:text-gray-400">
-                  {item.subtitleFileName}
+              {item.subtitleFileName || item.plainTextFileName ? (
+                <span title={item.subtitleFileName ?? item.plainTextFileName} className="text-gray-500 dark:text-gray-400">
+                  {item.subtitleFileName ?? item.plainTextFileName}
                 </span>
               ) : (
                 <span className="text-gray-400 italic dark:text-gray-500">{t.drawer.noSubtitle}</span>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AudioItem, PlaylistFolder, ReconnectWanted, RefreshResult } from '../../types';
 import { PlatformServiceFactory } from '../../services/platform/PlatformServiceFactory';
 import type { PlatformAdapter } from '../../services/platform/PlatformAdapter';
-import { isSubtitleFile } from '../../services/playlist/PlaylistMatcher';
+import { isPlainTextFile, isSubtitleFile } from '../../services/playlist/PlaylistMatcher';
 import { parseSubtitle } from '../../services/subtitle/SubtitleParser';
 import { intakeFiles } from '../../services/playlist/intake';
 import { type Lang, STRINGS } from '../../i18n';
@@ -228,6 +228,20 @@ export function usePlaylist(lang: Lang = 'ko') {
   );
 
   const attachSubtitle = useCallback(async (itemId: string, file: File): Promise<boolean> => {
+    if (isPlainTextFile(file.name)) {
+      try {
+        const text = await file.text();
+        commitItems(
+          itemsRef.current.map((i) =>
+            i.id === itemId ? { ...i, plainTextFileName: file.name, plainText: text, subtitles: [] } : i,
+          ),
+        );
+        return true;
+      } catch (err) {
+        console.warn('Text attach failed:', err);
+        return false;
+      }
+    }
     if (!isSubtitleFile(file.name)) return false;
     try {
       const cues = parseSubtitle(await file.text(), file.name);

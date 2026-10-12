@@ -69,6 +69,34 @@ describe('intakeFiles', () => {
     expect(items).toHaveLength(0);
   });
 
+  it('links same-stem txt as cueless plain text', async () => {
+    const { items, affectedCount } = await intakeFiles(
+      [audio('b.mp3'), new File(['line one\nline two'], 'b.txt')],
+      [],
+      null,
+    );
+    expect(affectedCount).toBe(1);
+    expect(items).toHaveLength(1);
+    expect(items[0].plainTextFileName).toBe('b.txt');
+    expect(items[0].plainText).toBe('line one\nline two');
+    expect(items[0].subtitles).toEqual([]);
+    expect(items[0].subtitleFileName).toBeUndefined();
+  });
+
+  it('prefers cued subtitles over txt', async () => {
+    const { items } = await intakeFiles([audio('c.mp3'), sub('c.vtt'), new File(['plain'], 'c.txt')], [], null);
+    expect(items).toHaveLength(1);
+    expect(items[0].subtitleFileName).toBe('c.vtt');
+    expect(items[0].plainText).toBeUndefined();
+  });
+
+  it('lone txt attaches to items lacking subtitles', async () => {
+    const first = await intakeFiles([audio('d.mp3')], [], null);
+    const { items, affectedCount } = await intakeFiles([new File(['doc'], 'd.txt')], first.items, null);
+    expect(affectedCount).toBe(1);
+    expect(items[0].plainText).toBe('doc');
+  });
+
   it('carries filePath from shells onto new items', async () => {
     const shell = withFilePath(new File([], 'a.mp3'), '/music/a.mp3');
     const { items } = await intakeFiles([shell], [], 'f1');

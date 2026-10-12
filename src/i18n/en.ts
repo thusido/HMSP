@@ -99,7 +99,7 @@ export const en: Dict = {
     renameFolder: 'Rename folder:',
     createFolder: 'Enter a new playlist folder name:',
     attachDone: (name: string) => `Attached subtitle '${name}'.`,
-    attachNeed: 'Select a subtitle file (vtt, srt).',
+    attachNeed: 'Select a subtitle file (vtt, srt, txt).',
     attachError: 'Failed to attach subtitle.',
     importReplace: 'This replaces the current playlist. Continue?',
     importDone: 'Playlist restored.\nReconnect media via refresh.',

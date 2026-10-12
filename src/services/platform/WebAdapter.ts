@@ -16,7 +16,7 @@ export class WebPlatformAdapter implements PlatformAdapter {
       const input = document.createElement('input');
       input.type = 'file';
       input.multiple = true;
-      input.accept = '.mp3,.wav,.m4a,.vtt,.srt';
+      input.accept = '.mp3,.wav,.m4a,.vtt,.srt,.txt';
       input.onchange = () => resolve(Array.from(input.files ?? []));
       input.oncancel = () => resolve([]);
       input.click();

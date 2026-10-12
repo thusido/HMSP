@@ -97,7 +97,7 @@ export const ko = {
     renameFolder: '폴더 이름을 변경하세요:',
     createFolder: '새 플레이리스트 폴더 이름을 입력하세요:',
     attachDone: (name: string) => `'${name}' 자막을 연결했습니다.`,
-    attachNeed: '자막 파일(vtt, srt)을 선택해주세요.',
+    attachNeed: '자막 파일(vtt, srt, txt)을 선택해주세요.',
     attachError: '자막 파일을 연결하는 중 오류가 발생했습니다.',
     importReplace: '기존 플레이리스트를 대체합니다. 계속하시겠습니까?',
     importDone: '플레이리스트를 복구했습니다.\n새로고침으로 미디어를 재연결해주세요.',

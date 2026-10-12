@@ -7,6 +7,7 @@ interface MainReaderProps {
   activeCueId: string | null;
   onSeekToCue: (cue: SubtitleCue) => void;
   hasAudio: boolean;
+  plainText?: string | null;
   readerFont: string;
   readerFontSize: number;
   readerLetterSpacing: number;
@@ -15,7 +16,7 @@ interface MainReaderProps {
 }
 
 /** Document-flow reader. Active cue highlighted; text selection wins over click-to-seek. */
-export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFont, readerFontSize, readerLetterSpacing, readerLineHeight, lang }: MainReaderProps) {
+export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, plainText, readerFont, readerFontSize, readerLetterSpacing, readerLineHeight, lang }: MainReaderProps) {
   const t = STRINGS[lang];
   const containerRef = useRef<HTMLElement>(null);
   const activeElementRef = useRef<HTMLDivElement | null>(null);
@@ -38,12 +39,33 @@ export function MainReader({ cues, activeCueId, onSeekToCue, hasAudio, readerFon
     onSeekToCue(cue);
   };
 
-  if (!hasAudio || cues.length === 0) {
+  if (!hasAudio || (cues.length === 0 && !plainText)) {
     return (
       <main className="flex flex-1 items-center justify-center bg-[#F0F2F5] p-8 text-gray-400 select-none dark:bg-gray-950 dark:text-gray-500">
         <p className="text-sm">
           {!hasAudio ? t.reader.noAudio : t.reader.noSubtitle}
         </p>
+      </main>
+    );
+  }
+
+  // Plain text companion: readable as-is, no cue tracking or seeking.
+  if (cues.length === 0 && plainText) {
+    return (
+      <main className="selectable-reader flex-1 overflow-y-auto bg-[#F0F2F5] px-3 py-6 sm:px-6 dark:bg-gray-950">
+        <div
+          className="mx-auto min-h-full max-w-2xl rounded-xl border border-gray-200/80 bg-white px-6 py-8 text-gray-800 shadow-sm sm:px-10 sm:py-12 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200"
+          style={{
+            fontFamily: readerFont,
+            fontSize: `${readerFontSize}px`,
+            letterSpacing: `${readerLetterSpacing / 100}em`,
+            lineHeight: `${readerLineHeight}%`,
+          }}
+        >
+          {plainText.split('\n').map((line, i) => (
+            <p key={i} className="mb-3 last:mb-0">{line || '\u00a0'}</p>
+          ))}
+        </div>
       </main>
     );
   }
