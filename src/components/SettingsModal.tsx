@@ -34,7 +34,7 @@ function fontLabel(t: Dict, value: ReaderFont): string {
 
 function Stepper({ label, value, display, decreaseLabel, increaseLabel, onMinus, onPlus }: { label: string; value: string; display?: string; decreaseLabel: string; increaseLabel: string; onMinus: () => void; onPlus: () => void }) {
   const btn =
-    'flex h-7 w-7 items-center justify-center rounded-md border border-ink text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:text-gray-300 dark:hover:bg-night-hover';
+    'flex h-7 w-7 items-center justify-center rounded-md border border-fog text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:text-gray-300 dark:hover:bg-night-hover';
   return (
     <div className="flex items-center justify-between py-1">
       <span className="text-xs text-graphite dark:text-gray-400">{label}</span>
@@ -59,16 +59,16 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
     `flex items-center justify-center gap-1.5 rounded-2xl border px-3 py-2 text-xs font-medium transition-colors ${
       active
         ? 'border-mint bg-mint/15 text-ink dark:bg-mint/15 dark:text-mint'
-        : 'border-ink text-graphite hover:bg-paper-deep dark:border-gray-700 dark:text-gray-300 dark:hover:bg-night-hover'
+        : 'border-fog text-graphite hover:bg-paper-deep dark:border-gray-700 dark:text-gray-300 dark:hover:bg-night-hover'
     }`;
   const backupBtn =
-    'flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-ink bg-paper-deep px-3 py-2 text-xs font-medium text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover';
+    'flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-fog bg-paper-deep px-3 py-2 text-xs font-medium text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60" onClick={onClose} aria-hidden="true" />
-      <div className="relative z-50 w-full max-w-md rounded-3xl border border-ink bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
-        <div className="flex items-center justify-between border-b border-ink pb-3 dark:border-gray-800">
+      <div className="relative z-50 w-full max-w-md rounded-3xl border border-fog bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
+        <div className="flex items-center justify-between border-b border-fog pb-3 dark:border-gray-800">
           <h2 className="text-base font-bold">{t.settings.title}</h2>
           <button
             type="button"
@@ -158,7 +158,7 @@ export function SettingsModal({ isOpen, onClose, theme, onChangeTheme, readerFon
           <button
             type="button"
             onClick={onClose}
-            className="rounded-2xl border border-ink px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:bg-paper-deep dark:border-graphite dark:text-gray-200 dark:hover:bg-night-hover"
+            className="rounded-2xl border border-fog px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:bg-paper-deep dark:border-graphite dark:text-gray-200 dark:hover:bg-night-hover"
           >
             {t.settings.close}
           </button>

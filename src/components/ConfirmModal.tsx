@@ -17,7 +17,7 @@ export function ConfirmModal({ isOpen, message, onConfirm, onCancel, destructive
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60" onClick={onCancel} aria-hidden="true" />
-      <div className="relative z-50 w-full max-w-sm rounded-3xl border border-ink bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
+      <div className="relative z-50 w-full max-w-sm rounded-3xl border border-fog bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
         <div className="flex items-start gap-3 pb-4">
           <ExclamationTriangleIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-500 dark:text-amber-400" />
           <p className="text-sm leading-relaxed whitespace-pre-line">{message}</p>
@@ -36,7 +36,7 @@ export function ConfirmModal({ isOpen, message, onConfirm, onCancel, destructive
             className={`rounded-2xl border px-4 py-1.5 text-xs font-medium transition-colors ${
               destructive
                 ? 'border-red-600 bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600'
-                : 'border-ink text-ink hover:bg-paper-deep dark:border-graphite dark:text-gray-200 dark:hover:bg-night-hover'
+                : 'border-fog text-ink hover:bg-paper-deep dark:border-graphite dark:text-gray-200 dark:hover:bg-night-hover'
             }`}
           >
             {t.modal.confirm}

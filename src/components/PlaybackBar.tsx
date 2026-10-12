@@ -125,7 +125,7 @@ export function PlaybackBar({
               {volume === 0 ? <SpeakerXMarkIcon className="h-4 w-4" /> : <SpeakerWaveIcon className="h-4 w-4" />}
             </button>
             {volumeOpen && (
-              <div className="absolute bottom-9 left-0 z-30 w-44 rounded-2xl border border-ink bg-paper p-3 dark:border-gray-700 dark:bg-night-card">
+              <div className="absolute bottom-9 left-0 z-30 w-44 rounded-2xl border border-fog bg-paper p-3 dark:border-gray-700 dark:bg-night-card">
                 <div className="mb-1 flex justify-between text-xs text-graphite dark:text-gray-300">
                   <span>{t.playback.volumeLabel}</span>
                   <span className="font-semibold">{Math.round(volume * 100)}%</span>
@@ -148,12 +148,12 @@ export function PlaybackBar({
               type="button"
               onClick={() => setSpeedOpen((v) => !v)}
               aria-label={t.playback.speed}
-              className="rounded-md border border-ink bg-paper px-2 py-0.5 text-xs font-medium text-graphite dark:border-gray-700 dark:bg-night-card dark:text-gray-200"
+              className="rounded-md border border-fog bg-paper px-2 py-0.5 text-xs font-medium text-graphite dark:border-gray-700 dark:bg-night-card dark:text-gray-200"
             >
               {rate}x
             </button>
             {speedOpen && (
-              <div className="absolute bottom-9 left-0 z-30 w-24 rounded-2xl border border-ink bg-paper py-1 dark:border-gray-700 dark:bg-night-card">
+              <div className="absolute bottom-9 left-0 z-30 w-24 rounded-2xl border border-fog bg-paper py-1 dark:border-gray-700 dark:bg-night-card">
                 {SPEED_OPTIONS.map((s) => (
                   <button
                     key={s}

@@ -27,7 +27,7 @@ export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onC
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/60" onClick={onCancel} aria-hidden="true" />
-      <div className="relative z-50 w-full max-w-sm rounded-3xl border border-ink bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
+      <div className="relative z-50 w-full max-w-sm rounded-3xl border border-fog bg-paper p-6 text-ink dark:border-gray-800 dark:bg-night dark:text-gray-100">
         <p className="pb-4 text-sm leading-relaxed whitespace-pre-line">{message}</p>
         <input
           ref={inputRef}
@@ -37,7 +37,7 @@ export function PromptModal({ isOpen, message, defaultValue = '', onConfirm, onC
           onKeyDown={(e) => {
             if (e.key === 'Enter') onConfirm(value);
           }}
-          className="w-full rounded-md border border-ink px-3 py-2 focus:ring-2 focus:ring-graphite focus:outline-none dark:border-gray-700 dark:bg-night-card dark:text-gray-100"
+          className="w-full rounded-md border border-fog px-3 py-2 focus:ring-2 focus:ring-graphite focus:outline-none dark:border-gray-700 dark:bg-night-card dark:text-gray-100"
         />
         <div className="mt-3 flex justify-end gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
           <button

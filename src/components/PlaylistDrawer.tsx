@@ -86,8 +86,8 @@ export function PlaylistDrawer({
           isPlaying
             ? 'border-mint ring-2 ring-mint/30 dark:border-mint'
             : isSelected
-              ? 'border-ink/30 bg-ink/5 dark:border-graphite dark:bg-paper/5'
-              : 'border-ink hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+              ? 'border-fog bg-paper-deep dark:border-graphite dark:bg-paper/5'
+              : 'border-fog hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
         }`}
       >
         <div className="mr-2 flex flex-1 items-start gap-2 overflow-hidden">
@@ -133,16 +133,16 @@ export function PlaylistDrawer({
   };
 
   const drawerContent = (
-    <div className="z-30 flex h-full w-80 flex-shrink-0 flex-col border-r border-ink bg-paper select-none dark:border-gray-800 dark:bg-night">
+    <div className="z-30 flex h-full w-80 flex-shrink-0 flex-col border-r border-fog bg-paper select-none dark:border-gray-800 dark:bg-night">
       <div className="flex h-12 flex-shrink-0 items-center justify-between bg-paper px-2.5 dark:bg-night">
         <div className="flex items-center gap-1.5">
-          <button type="button" onClick={onAddFiles} title={t.drawer.addFiles} aria-label={t.drawer.addFiles} className="rounded-md border border-ink bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onAddFiles} title={t.drawer.addFiles} aria-label={t.drawer.addFiles} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
             <PlusIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onAddFolder} title={t.drawer.addFolder} aria-label={t.drawer.addFolder} className="rounded-md border border-ink bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onAddFolder} title={t.drawer.addFolder} aria-label={t.drawer.addFolder} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
             <FolderPlusIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onCreateVirtualFolder} title={t.drawer.newFolder} aria-label={t.drawer.newFolder} className="rounded-md border border-ink bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onCreateVirtualFolder} title={t.drawer.newFolder} aria-label={t.drawer.newFolder} className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
             <FolderIcon className="h-4 w-4" />
           </button>
           <button
@@ -151,7 +151,7 @@ export function PlaylistDrawer({
             disabled={!selectedFolderId}
             title={t.drawer.rename}
             aria-label="Rename selected folder"
-            className="rounded-md border border-ink bg-paper p-1.5 transition-colors dark:border-gray-700 dark:bg-night-card disabled:cursor-not-allowed disabled:opacity-40 hover:bg-paper-deep dark:hover:bg-night-hover"
+            className="rounded-md border border-fog bg-paper p-1.5 transition-colors dark:border-gray-700 dark:bg-night-card disabled:cursor-not-allowed disabled:opacity-40 hover:bg-paper-deep dark:hover:bg-night-hover"
           >
             <PencilIcon className="h-4 w-4" />
           </button>
@@ -195,7 +195,7 @@ export function PlaylistDrawer({
                   ? 'border-mint bg-mint/20 dark:border-mint dark:bg-mint/15'
                   : isSelected
                     ? 'border-mint/70 bg-mint/10 dark:border-graphite dark:bg-paper/5'
-                    : 'border-ink bg-drawer-folder dark:border-gray-800 dark:bg-night-card/80'
+                    : 'border-fog bg-drawer-folder dark:border-gray-800 dark:bg-night-card/80'
               }`}
             >
               <div
@@ -235,7 +235,7 @@ export function PlaylistDrawer({
         })}
 
         {rootItems.length > 0 && (
-          <div className="rounded-2xl border border-ink bg-paper-deep/70 p-2 dark:border-gray-800 dark:bg-night-card/50">
+          <div className="rounded-2xl border border-fog bg-paper-deep/70 p-2 dark:border-gray-800 dark:bg-night-card/50">
             <div
               onClick={() => onSelectFolder(null)}
               className="mb-1.5 flex cursor-pointer items-center justify-between px-1 text-xs font-bold text-graphite dark:text-gray-300"
@@ -256,13 +256,13 @@ export function PlaylistDrawer({
 
       <div className="flex flex-shrink-0 items-center justify-between bg-paper p-2 text-xs dark:bg-night">
         <div className="flex items-center gap-1">
-          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title={t.drawer.moveUp} className="rounded border border-ink bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onMoveFolderUp} disabled={!selectedFolderId} title={t.drawer.moveUp} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
             {t.drawer.moveUpLabel}
           </button>
-          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title={t.drawer.moveDown} className="rounded border border-ink bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onMoveFolderDown} disabled={!selectedFolderId} title={t.drawer.moveDown} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
             {t.drawer.moveDownLabel}
           </button>
-          <button type="button" onClick={onAutoSortFolders} title={t.drawer.autoSort} className="rounded border border-ink bg-paper px-2 py-1 text-graphite hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
+          <button type="button" onClick={onAutoSortFolders} title={t.drawer.autoSort} className="rounded border border-fog bg-paper px-2 py-1 text-graphite hover:bg-paper-deep dark:border-gray-700 dark:bg-night-card dark:text-gray-200 dark:hover:bg-night-hover">
             {t.drawer.autoSortLabel}
           </button>
         </div>

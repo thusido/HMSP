@@ -5,8 +5,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: '#f8f5ed',
-        paperDeep: '#ece4d0',
+        paper: '#ffffff',
+        paperDeep: '#f5f5f5',
+        tint: '#f7f5ed',
+        fog: '#ebebeb',
         ink: '#1a1712',
         graphite: '#707070',
         sunshine: '#ffda6e',
