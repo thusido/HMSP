@@ -1,0 +1,19 @@
+Ridibatang License (as published by RIDI Corporation)
+
+Ridibatang is an open-license font provided free of charge to all users,
+including individuals and companies. It may be freely modified and
+redistributed. Selling the font files themselves is prohibited.
+
+Bundling, redistributing, or selling this font with other software is
+permitted provided this copyright notice and the full license text are
+included. Where including the full license text is difficult, attribution
+of the source is recommended instead.
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+
+Copyright of Ridibatang is owned by RIDI Corporation (https://ridicorp.com/ridibatang/).
+
+---
+Source of this copy: noonnu mirror (https://noonnu.cc/font_page/324),
+file https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff
+(RIDI operates no official GitHub repository or CDN as of 2026-10-12).

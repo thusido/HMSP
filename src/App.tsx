@@ -11,7 +11,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { usePlayback } from './features/playback/usePlayback';
 import { usePlaylist } from './features/playlist/usePlaylist';
 import { useReader } from './features/reader/useReader';
-import { SETTINGS_KEY, useSettings } from './features/settings/useSettings';
+import { SETTINGS_KEY, READER_FONT_STACKS, useSettings } from './features/settings/useSettings';
 import {
   calculateNextSubtitleTime,
   calculatePrevSubtitleTime,
@@ -41,7 +41,7 @@ export default function App() {
   const [prompt, setPrompt] = useState<PromptState | null>(null);
   const [notice, setNotice] = useState<NoticeState | null>(null);
 
-  const { settings, updateSettings } = useSettings();
+  const { settings, updateSettings, resetReaderSettings } = useSettings();
   const playlist = usePlaylist();
   const { items, currentItem } = playlist;
   const notify = useCallback((message: string) => setNotice({ id: Date.now(), message }), []);
@@ -344,6 +344,10 @@ export default function App() {
           activeCueId={activeCue?.id ?? null}
           onSeekToCue={(cue) => playback.seek(cue.startTime)}
           hasAudio={!!currentItem}
+          readerFont={READER_FONT_STACKS[settings.readerFont]}
+          readerFontSize={settings.fontSize}
+          readerLetterSpacing={settings.letterSpacing}
+          readerLineHeight={settings.lineHeight}
         />
         <PlaybackBar
           currentTime={playback.currentTime}
@@ -379,6 +383,12 @@ export default function App() {
         onClose={() => setIsSettingsOpen(false)}
         theme={settings.theme}
         onChangeTheme={(theme) => updateSettings({ theme })}
+        readerFont={settings.readerFont}
+        fontSize={settings.fontSize}
+        letterSpacing={settings.letterSpacing}
+        lineHeight={settings.lineHeight}
+        onUpdateReader={(patch) => updateSettings(patch)}
+        onResetReader={resetReaderSettings}
         onExportPlaylist={handleExport}
         onImportPlaylist={handleImport}
       />
