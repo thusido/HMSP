@@ -151,7 +151,7 @@ export function PlaylistDrawer({
             disabled={!selectedFolderId}
             title={t.drawer.rename}
             aria-label="Rename selected folder"
-            className="rounded-md border border-fog bg-paper p-1.5 transition-colors dark:border-white/10 dark:bg-night-card disabled:cursor-not-allowed disabled:opacity-40 hover:bg-paper-deep dark:hover:bg-night-hover"
+            className="rounded-md border border-fog bg-paper p-1.5 text-graphite transition-colors hover:bg-paper-deep dark:border-white/10 dark:bg-night-card dark:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-night-hover"
           >
             <PencilIcon className="h-4 w-4" />
           </button>
