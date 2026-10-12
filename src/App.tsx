@@ -11,16 +11,15 @@ import { SettingsModal } from './components/SettingsModal';
 import { usePlayback } from './features/playback/usePlayback';
 import { usePlaylist } from './features/playlist/usePlaylist';
 import { useReader } from './features/reader/useReader';
+import { SETTINGS_KEY, useSettings } from './features/settings/useSettings';
 import {
   calculateNextSubtitleTime,
   calculatePrevSubtitleTime,
   getGroupSortedFiles,
 } from './services/playback/navigation';
-import type { AppTheme, AudioItem } from './types';
+import type { AudioItem } from './types';
 import { parseDropEvent } from './utils/dragAndDrop';
 import { shouldUseSafeArea } from './services/platform/PlatformAdapter';
-
-const SETTINGS_KEY = 'HMSP_V1_SETTINGS';
 
 interface ConfirmState {
   message: string;
@@ -38,11 +37,11 @@ export default function App() {
   const [isWide, setIsWide] = useState(() => window.innerWidth >= 768);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [theme, setTheme] = useState<AppTheme>('light');
   const [confirm, setConfirm] = useState<ConfirmState | null>(null);
   const [prompt, setPrompt] = useState<PromptState | null>(null);
   const [notice, setNotice] = useState<NoticeState | null>(null);
 
+  const { settings, updateSettings } = useSettings();
   const playlist = usePlaylist();
   const { items, currentItem } = playlist;
   const notify = useCallback((message: string) => setNotice({ id: Date.now(), message }), []);
@@ -93,7 +92,6 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (typeof parsed.volume === 'number') playbackRef.current.setVolume(parsed.volume);
-        if (parsed.theme) setTheme(parsed.theme);
       }
     } catch (err) {
       console.warn('Failed to load settings:', err);
@@ -102,14 +100,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.classList.toggle('dark', isDark);
     try {
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ volume: playback.volume, theme }));
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ volume: playback.volume, ...settings }));
     } catch (err) {
       console.warn('Failed to persist settings:', err);
     }
-  }, [theme, playback.volume]);
+  }, [settings, playback.volume]);
 
   const cues = useMemo(() => currentItem?.subtitles ?? [], [currentItem]);
   const activeCue = useReader(cues, playback.currentTime);
@@ -381,8 +377,8 @@ export default function App() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        theme={theme}
-        onChangeTheme={setTheme}
+        theme={settings.theme}
+        onChangeTheme={(theme) => updateSettings({ theme })}
         onExportPlaylist={handleExport}
         onImportPlaylist={handleImport}
       />
