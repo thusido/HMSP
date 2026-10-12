@@ -6,7 +6,7 @@ export default {
     extend: {
       colors: {
         paper: '#ffffff',
-        paperDeep: '#f5f5f5',
+        'paper-deep': '#f5f5f5',
         tint: '#f7f5ed',
         fog: '#ebebeb',
         ink: '#1a1712',
@@ -15,8 +15,8 @@ export default {
         sunshine: '#ffda6e',
         mint: '#6ece9d',
         night: '#0a0a0a',
-        nightCard: '#141414',
-        nightHover: '#1f1f1f',
+        'night-card': '#141414',
+        'night-hover': '#1f1f1f',
       },
     },
   },
