@@ -83,7 +83,6 @@ pnpm build:pwa    # PWA 빌드 — Service Worker가 포함되는 유일한 빌�
 pnpm test         # vitest
 pnpm tauri dev    # 데스크톱 셸
 pnpm tauri build  # 데스크톱 설치본
-pnpm icons        # 아이콘 파이프라인 (소스는 git 제외된 HMSP_user_icon/)
 ```
 
 각 단위마다 검증:

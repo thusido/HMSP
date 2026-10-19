@@ -86,7 +86,6 @@ pnpm build:pwa    # PWA build — the only build with a Service Worker (VITE_PWA
 pnpm test         # vitest
 pnpm tauri dev    # desktop shell
 pnpm tauri build  # desktop installer
-pnpm icons        # icon pipeline (sources live in the git-ignored HMSP_user_icon/)
 ```
 
 Verify every increment:
