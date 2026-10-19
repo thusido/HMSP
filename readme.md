@@ -35,9 +35,13 @@ An audiobook-style continuous document subtitle reader synchronized with audio p
 
 ## Screenshots
 
-| Light drawer | Dark | Dark drawer | Settings |
-|---|---|---|---|
-| ![drawer open](.github/screenshots/main_drawer.png) | ![dark mode](.github/screenshots/dark_main.png) | ![drawer open, dark](.github/screenshots/dark_main_drawer.png) | ![settings](.github/screenshots/settings.png) |
+| Light drawer | Dark |
+|---|---|
+| ![drawer open](.github/screenshots/main_drawer.png) | ![dark mode](.github/screenshots/dark_main.png) |
+
+| Dark drawer | Settings |
+|---|---|
+| ![drawer open, dark](.github/screenshots/dark_main_drawer.png) | ![settings](.github/screenshots/settings.png) |
 
 ## Download
 
@@ -59,7 +63,17 @@ These are unsigned test builds:
   click **More info → Run anyway**.
 - **Android**: allow installs from unknown sources first.
 
+iOS and iPadOS cannot be installed from a release build:
+
+- **PWA**: host the PWA build with an iOS local terminal app such as a-Shell, then add it to the
+  Home Screen from Safari and use it offline.
+- The same route works on any environment that supports installing a PWA, not only the iOS family.
+
 ## Development
+
+Tech stack: TypeScript, React 19, Vite 6, Tailwind CSS 3, Tauri v2, Vitest.
+Platform differences are isolated in `src/services/platform/PlatformAdapter`; the Tauri adapter
+is lazy-loaded so web/PWA bundles exclude `@tauri-apps/*`.
 
 Prerequisites: Node LTS, pnpm 10, Rust stable (rustup — Homebrew cargo lacks the Android
 targets). Android additionally needs the Android Studio SDK (see below).
@@ -75,10 +89,6 @@ pnpm tauri build  # desktop installer
 pnpm icons        # icon pipeline (sources live in the git-ignored HMSP_user_icon/)
 ```
 
-Tech stack: TypeScript, React 19, Vite 6, Tailwind CSS 3, Tauri v2, Vitest.
-Platform differences are isolated in `src/services/platform/PlatformAdapter`; the Tauri adapter
-is lazy-loaded so web/PWA bundles exclude `@tauri-apps/*`.
-
 Verify every increment:
 
 ```bash
@@ -90,7 +100,7 @@ rg 'w-\[.*px\]|min-w-\[|text-\[[0-9]+px\]' src   # must be empty (flex-first lay
 
 ### Reproduce from git
 
-`src-tauri/gen/`, `docs/`, and `HMSP_user_icon/` are git-ignored by design.
+`src-tauri/gen/` is git-ignored by design.
 After cloning:
 
 ```bash
@@ -107,7 +117,8 @@ Android env (macOS + Android Studio SDK): `ANDROID_HOME=$HOME/Library/Android/sd
 ## Font licenses
 
 The bundled fonts are covered by the **SIL Open Font License (OFL) version 1.1**, separately from
-the project license. Every font used in this project is distributed under OFL 1.1:
+the project license. Every font used in this project is a redistribution of a font released under
+OFL 1.1:
 
 | Font | Files | License |
 |---|---|---|

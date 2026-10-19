@@ -33,9 +33,13 @@
 
 ## 화면
 
-| 라이트 서랍 | 다크 | 다크 서랍 | 설정 |
-|---|---|---|---|
-| ![서랍 열림](.github/screenshots/main_drawer.png) | ![다크 모드](.github/screenshots/dark_main.png) | ![서랍 열림, 다크](.github/screenshots/dark_main_drawer.png) | ![설정](.github/screenshots/settings.png) |
+| 라이트 서랍 | 다크 |
+|---|---|
+| ![서랍 열림](.github/screenshots/main_drawer.png) | ![다크 모드](.github/screenshots/dark_main.png) |
+
+| 다크 서랍 | 설정 |
+|---|---|
+| ![서랍 열림, 다크](.github/screenshots/dark_main_drawer.png) | ![설정](.github/screenshots/settings.png) |
 
 ## 다운로드
 
@@ -56,7 +60,17 @@
 - **Windows**: SmartScreen "알 수 없는 게시자"에서 **추가 정보 → 그래도 실행**.
 - **Android**: 알 수 없는 출처의 앱 설치를 먼저 허용.
 
+iOS·iPadOS는 Releases 빌드로 설치할 수 없습니다:
+
+- **PWA**: a-Shell 같은 iOS용 로컬 터미널 앱으로 PWA 빌드를 호스팅한 뒤,
+  Safari에서 '홈 화면에 추가'하여 오프라인으로 사용합니다.
+- PWA 설치를 지원하는 환경이면 iOS 계열이 아니어도 같은 방식으로 사용할 수 있습니다.
+
 ## 개발
+
+기술 스택: TypeScript, React 19, Vite 6, Tailwind CSS 3, Tauri v2, Vitest.
+플랫폼 차이는 `src/services/platform/PlatformAdapter`에 격리되어 있고, Tauri 어댑터는
+lazy-load되어 웹/PWA 번들에서 `@tauri-apps/*`가 제외됩니다.
 
 준비물: Node LTS, pnpm 10, Rust stable(rustup — Homebrew cargo에는 Android 타겟이 없음).
 Android는 Android Studio SDK가 추가로 필요합니다(아래 참고).
@@ -72,10 +86,6 @@ pnpm tauri build  # 데스크톱 설치본
 pnpm icons        # 아이콘 파이프라인 (소스는 git 제외된 HMSP_user_icon/)
 ```
 
-기술 스택: TypeScript, React 19, Vite 6, Tailwind CSS 3, Tauri v2, Vitest.
-플랫폼 차이는 `src/services/platform/PlatformAdapter`에 격리되어 있고, Tauri 어댑터는
-lazy-load되어 웹/PWA 번들에서 `@tauri-apps/*`가 제외됩니다.
-
 각 단위마다 검증:
 
 ```bash
@@ -87,7 +97,7 @@ rg 'w-\[.*px\]|min-w-\[|text-\[[0-9]+px\]' src   # 비어 있어야 함 (flex-fi
 
 ### git에서 재현
 
-`src-tauri/gen/`, `docs/`, `HMSP_user_icon/`은 의도적으로 git에서 제외됩니다.
+`src-tauri/gen/` 은 의도적으로 git에서 제외됩니다.
 클론 후:
 
 ```bash
@@ -103,8 +113,8 @@ Android 환경 (macOS + Android Studio SDK): `ANDROID_HOME=$HOME/Library/Android
 
 ## 폰트 라이선스
 
-번들 폰트는 프로젝트 라이선스와 별개로 **SIL Open Font License (OFL) version 1.1**을 따릅니다.
-이 프로젝트에서 사용하는 모든 폰트는 OFL 1.1로 배포됩니다:
+폰트는 프로젝트 라이선스와 별개로 **SIL Open Font License (OFL) version 1.1**을 따릅니다.
+이 프로젝트에서 사용하는 모든 폰트는 OFL 1.1로 배포된 폰트의 재배포본입니다.
 
 | 폰트 | 위치 | 라이선스 |
 |---|---|---|
@@ -113,7 +123,7 @@ Android 환경 (macOS + Android Studio SDK): `ANDROID_HOME=$HOME/Library/Android
 | SUIT | `src/assets/fonts/suit/` | SIL OFL 1.1 |
 | 리디바탕 (Ridibatang) | `src/assets/fonts/ridibatang/` | SIL OFL 1.1 |
 
-전문은 [`public/SIL OFL 1.1.md`](./public/SIL%20OFL%201.1.md)에 있으며 빌드에도 함께 포함됩니다.
+라이선스 전문은 [`public/SIL OFL 1.1.md`](./public/SIL%20OFL%201.1.md)에 있으며 빌드에도 함께 포함됩니다.
 각 폰트 디렉터리에는 자체 `OFL.txt` / `LICENSE.txt`가 들어 있습니다.
 
 ## 라이선스
